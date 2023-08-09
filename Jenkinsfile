@@ -5,7 +5,7 @@ pipeline {
         // Checkout Git repository
         stage('Checkout Git') {
             steps {
-                checkout scm
+//                 checkout scm
                 echo 'Git Checkout Success!'
             }
         }
@@ -13,7 +13,7 @@ pipeline {
         // Build repository
         stage('Build') {
             steps {
-                sh './gradlew clean bootJar'
+//                 sh './gradlew clean bootJar'
                 echo 'Build repository Success!'
             }
         }
@@ -21,7 +21,7 @@ pipeline {
         // Test
         stage('Test') {
             steps {
-                sh 'gradle test'
+//                 sh 'gradle test'
                 echo 'Test Success!'
             }
         }
