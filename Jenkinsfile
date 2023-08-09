@@ -1,15 +1,15 @@
 pipeline {
     agent any
     tools {
-          gradle 'gradle'
+        gradle 'gradle'
     }
 
     stages {
         // Checkout Git repository
         stage('Checkout Git') {
             steps {
-                   checkout scm
-                   echo 'Git Checkout Success!'
+                checkout scm
+                echo 'Git Checkout Success!'
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
 
     post {
         success {
-             echo 'Build Success'
+            echo 'Build Success'
         }
     }
 }
