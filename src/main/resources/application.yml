@@ -28,6 +28,18 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+    com:
+      flab:
+        auctionhub:
+          repository:
+            mybatis: trace
+
+mybatis:
+  type-aliases-package: com.flab.auctionhub.domain
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
 ---
 # MySQL dev 환경
 spring:
