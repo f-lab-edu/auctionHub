@@ -15,12 +15,12 @@
   </select>
 
   <select id="findAll" resultType="com.flab.auctionhub.user.domain.User">
-    SELECT *
+    SELECT user_id, password, username, role_type, phone_number
     FROM user;
   </select>
 
   <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.user.domain.User">
-    SELECT *
+    SELECT user_id, password, username, role_type, phone_number
     FROM user
     WHERE id = #{id};
   </select>

@@ -1,5 +1,6 @@
 package com.flab.auctionhub.user.dto.request;
 
+import com.flab.auctionhub.user.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -33,4 +34,14 @@ public class UserCreateRequest {
     @NotBlank(message = "휴대폰 번호 입력은 필수입니다.")
     @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$", message = "휴대폰 번호 형식에 맞게 입력해 주세요.")
     private String phoneNumber;
+
+    public User toEntity() {
+        return User.builder()
+            .userId(this.getUserId())
+            .password(this.getPassword())
+            .username(this.getUsername())
+            .phoneNumber(this.getPhoneNumber())
+            .createdBy(this.getUsername())
+            .build();
+    }
 }

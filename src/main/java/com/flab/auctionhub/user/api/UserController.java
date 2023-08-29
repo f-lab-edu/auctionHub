@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,16 +27,16 @@ public class UserController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/check-duplication/{userId}")
-    public ResponseEntity<Boolean> checkUserIdDuplication(@PathVariable String userId) {
+    @GetMapping("/users/check-duplication")
+    public ResponseEntity<Boolean> checkUserIdDuplication(@RequestParam String userId) {
         userService.checkUserIdDuplication(userId);
         return new ResponseEntity<>(Boolean.FALSE, HttpStatus.OK);
     }
 
     @GetMapping("/users")
     public ResponseEntity<List<UserCreateResponse>> findAllUser() {
-        List<UserCreateResponse> allUser = userService.findAllUser();
-        return new ResponseEntity<>(allUser, HttpStatus.OK);
+        List<UserCreateResponse> userList = userService.findAllUser();
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")

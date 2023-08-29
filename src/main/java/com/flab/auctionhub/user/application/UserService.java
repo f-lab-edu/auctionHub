@@ -1,12 +1,12 @@
 package com.flab.auctionhub.user.application;
 
 import com.flab.auctionhub.user.dao.UserMapper;
-import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.dto.request.UserCreateRequest;
 import com.flab.auctionhub.user.dto.response.UserCreateResponse;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
-import java.util.ArrayList;
+import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +19,8 @@ public class UserService {
 
     @Transactional
     public void createUser(UserCreateRequest request) {
-        User user = User.builder()
-            .userId(request.getUserId())
-            .password(request.getPassword())
-            .username(request.getUsername())
-            .phoneNumber(request.getPhoneNumber())
-            .createdBy(request.getUsername())
-            .build();
-        userMapper.save(user);
+        this.checkUserIdDuplication(request.getUserId());
+        userMapper.save(request.toEntity());
     }
 
     public void checkUserIdDuplication(String userId) {
@@ -36,30 +30,14 @@ public class UserService {
     }
 
     public List<UserCreateResponse> findAllUser() {
-        List<User> users = userMapper.findAll();
-        List<UserCreateResponse> userCreateResponseList = new ArrayList<>();
-
-        for (User user : users) {
-            UserCreateResponse userCreateResponse = UserCreateResponse.builder()
-                .userId(user.getUserId())
-                .password(user.getPassword())
-                .username(user.getUsername())
-                .roleType(user.getRoleType())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
-            userCreateResponseList.add(userCreateResponse);
-        }
-        return userCreateResponseList;
+        return userMapper.findAll().stream()
+            .map(UserCreateResponse::of)
+            .collect(Collectors.toList());
     }
 
     public UserCreateResponse findByIdUser(Long id) {
-        User user = userMapper.findById(id).orElseThrow(NullPointerException::new);
-        return UserCreateResponse.builder()
-            .userId(user.getUserId())
-            .password(user.getPassword())
-            .username(user.getUsername())
-            .roleType(user.getRoleType())
-            .phoneNumber(user.getPhoneNumber())
-            .build();
+        return userMapper.findById(id)
+            .map(UserCreateResponse::of)
+            .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
     }
 }
