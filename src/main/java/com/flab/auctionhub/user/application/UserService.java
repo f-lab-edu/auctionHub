@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service // 서비스 레이어임을 명시해주며 @Component를 가지고 있어 스프링 빈으로 등록 시키는 역할을 수행한다.
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
 
-    @Transactional
+    @Transactional // 수행하는 작업에 대해 트랜잭션 원칙이 지켜지도록 보장해주는 역할을 한다.
     public void createUser(UserCreateRequest request) {
         this.checkUserIdDuplication(request.getUserId());
         userMapper.save(request.toEntity());

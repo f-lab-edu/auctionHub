@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
+@Mapper // MyBatis의 매퍼 등록을 위한 어노테이션
 public interface UserMapper {
 
     void save(User user);

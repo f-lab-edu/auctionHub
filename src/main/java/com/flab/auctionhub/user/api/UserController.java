@@ -15,19 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequiredArgsConstructor
+@RestController // @Controller + @ResponseBody 어노테이션으로 JSON 형태로 객체 데이터를 반환한다.
+@RequiredArgsConstructor // lombok에서 제공하는 어노테이션으로 final 키워드 또는 @NonNull이 붙은 필드들로 이루어진 생성자를 만들어준다.
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping("/users") // HTTP POST 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.POST)과 같은 역할을 한다.
     public ResponseEntity createUser(@RequestBody @Validated UserCreateRequest request) {
+        // @RequestBody : 요청의 body 데이터를 객체로 변환해주는 어노테이션, @Validated : 유효성 검증을 적용하기 위해 사용된 어노테이션
         userService.createUser(request);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/users/check-duplication")
+    @GetMapping("/users/check-duplication") // HTTP GET 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.GET)과 같은 역할을 한다.
     public ResponseEntity<Boolean> checkUserIdDuplication(@RequestParam String userId) {
         userService.checkUserIdDuplication(userId);
         return new ResponseEntity<>(Boolean.FALSE, HttpStatus.OK);

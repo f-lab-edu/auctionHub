@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 
-@Builder
-@Getter
-@AllArgsConstructor
+@Builder // 객체 생성을 편리하게 하기 위한 어노테이션
+@Getter // 클래스의 필드에 대한 Getter 메소드를 자동으로 생성해주는 어노테이션
+@AllArgsConstructor // 클래스의 코든 필드에 대한 생성자를 자동으로 생성해주는 어노테이션
 public class User {
 
     /**
