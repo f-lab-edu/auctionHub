@@ -22,10 +22,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users") // HTTP POST 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.POST)과 같은 역할을 한다.
-    public ResponseEntity createUser(@RequestBody @Validated UserCreateRequest request) {
+    public ResponseEntity<Long> createUser(@RequestBody @Validated UserCreateRequest request) {
         // @RequestBody : 요청의 body 데이터를 객체로 변환해주는 어노테이션, @Validated : 유효성 검증을 적용하기 위해 사용된 어노테이션
-        userService.createUser(request);
-        return new ResponseEntity(HttpStatus.CREATED);
+        Long id = userService.createUser(request);
+        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/check-duplication") // HTTP GET 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.GET)과 같은 역할을 한다.
@@ -41,8 +41,8 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserCreateResponse> findByIdUser(@PathVariable Long id) {
-        UserCreateResponse user = userService.findByIdUser(id);
+    public ResponseEntity<UserCreateResponse> findById(@PathVariable Long id) {
+        UserCreateResponse user = userService.findById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

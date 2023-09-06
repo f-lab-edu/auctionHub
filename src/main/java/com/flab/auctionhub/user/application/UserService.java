@@ -1,6 +1,7 @@
 package com.flab.auctionhub.user.application;
 
 import com.flab.auctionhub.user.dao.UserMapper;
+import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.dto.request.UserCreateRequest;
 import com.flab.auctionhub.user.dto.response.UserCreateResponse;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
@@ -18,9 +19,11 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional // 수행하는 작업에 대해 트랜잭션 원칙이 지켜지도록 보장해주는 역할을 한다.
-    public void createUser(UserCreateRequest request) {
+    public Long createUser(UserCreateRequest request) {
         this.checkUserIdDuplication(request.getUserId());
-        userMapper.save(request.toEntity());
+        User user = request.toEntity();
+        userMapper.save(user);
+        return user.getId();
     }
 
     public void checkUserIdDuplication(String userId) {
@@ -35,7 +38,7 @@ public class UserService {
             .collect(Collectors.toList());
     }
 
-    public UserCreateResponse findByIdUser(Long id) {
+    public UserCreateResponse findById(Long id) {
         return userMapper.findById(id)
             .map(UserCreateResponse::of)
             .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
