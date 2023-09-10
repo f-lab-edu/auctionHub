@@ -8,12 +8,16 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class UserCreateResponse {
+public class UserLoginResponse {
 
     /**
      * 회원 아이디
      */
     private String userId;
+    /**
+     * 회원 비밀번호
+     */
+    private String password;
     /**
      * 회원명
      */
@@ -27,9 +31,10 @@ public class UserCreateResponse {
      */
     private String phoneNumber;
 
-    public static UserCreateResponse of(User user) {
-        return UserCreateResponse.builder()
+    public static UserLoginResponse of(User user) {
+        return UserLoginResponse.builder()
             .userId(user.getUserId())
+            .password(user.getPassword())
             .username(user.getUsername())
             .roleType(user.getRoleType())
             .phoneNumber(user.getPhoneNumber())

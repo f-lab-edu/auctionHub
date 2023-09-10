@@ -3,9 +3,13 @@ package com.flab.auctionhub.user.application;
 import com.flab.auctionhub.user.dao.UserMapper;
 import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.dto.request.UserCreateRequest;
+import com.flab.auctionhub.user.dto.request.UserLoginRequest;
 import com.flab.auctionhub.user.dto.response.UserCreateResponse;
+import com.flab.auctionhub.user.dto.response.UserLoginResponse;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
+import com.flab.auctionhub.user.exception.InvalidSigningInformationException;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +46,12 @@ public class UserService {
         return userMapper.findById(id)
             .map(UserCreateResponse::of)
             .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
+    }
+
+    public UserLoginResponse login(UserLoginRequest request, HttpSession session) {
+        User user = userMapper.findByUserIdAndPassword(request.getUserId(), request.getPassword())
+            .orElseThrow(() -> new InvalidSigningInformationException("아이디/비밀번호가 올바르지 않습니다."));
+        session.setAttribute("", user.getUserId());
+        return UserLoginResponse.of(user);
     }
 }
