@@ -17,5 +17,5 @@ public interface UserMapper {
 
     Optional<User> findById(Long id);
 
-    Optional<User> findByUserIdAndPassword(@Param("userId") String userId, @Param("password") String password);
+    Optional<User> findByUserId(String userId);
 }

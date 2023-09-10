@@ -28,10 +28,10 @@
     WHERE id = #{id};
   </select>
 
-  <select id="findByUserIdAndPassword" parameterType="String" resultType="com.flab.auctionhub.user.domain.User">
+  <select id="findByUserId" parameterType="String" resultType="com.flab.auctionhub.user.domain.User">
     SELECT user_id, password, username, role_type, phone_number
     FROM user
-    WHERE user_id = #{userId} AND password = #{password}
+    WHERE user_id = #{userId}
   </select>
 
 </mapper>

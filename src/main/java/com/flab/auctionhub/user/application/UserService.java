@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +24,12 @@ public class UserService {
     private static final String USER_ID = "USER_ID";
     private final UserMapper userMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional // 수행하는 작업에 대해 트랜잭션 원칙이 지켜지도록 보장해주는 역할을 한다.
     public Long createUser(UserCreateRequest request) {
         this.checkUserIdDuplication(request.getUserId());
-        User user = request.toEntity();
+        User user = request.toEntity(passwordEncoder);
         userMapper.save(user);
         return user.getId();
     }
@@ -50,9 +53,18 @@ public class UserService {
     }
 
     public UserLoginResponse login(UserLoginRequest request, HttpSession session) {
-        User user = userMapper.findByUserIdAndPassword(request.getUserId(), request.getPassword())
-            .orElseThrow(() -> new InvalidSigningInformationException("아이디/비밀번호가 올바르지 않습니다."));
+        User user = userMapper.findByUserId(request.getUserId())
+            .orElseThrow(() -> new InvalidSigningInformationException("등록 되지 않은 사용자입니다."));
+
+        if (validatedPassword(user.getPassword(), request.getPassword())) {
+            throw new InvalidSigningInformationException("비밀번호가 올바르지 않습니다.");
+        }
+
         session.setAttribute(USER_ID, user.getUserId());
         return UserLoginResponse.of(user);
+    }
+
+    private boolean validatedPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
