@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private static final String USER_ID = "USER_ID";
     private final UserMapper userMapper;
 
     @Transactional // 수행하는 작업에 대해 트랜잭션 원칙이 지켜지도록 보장해주는 역할을 한다.
@@ -51,7 +52,7 @@ public class UserService {
     public UserLoginResponse login(UserLoginRequest request, HttpSession session) {
         User user = userMapper.findByUserIdAndPassword(request.getUserId(), request.getPassword())
             .orElseThrow(() -> new InvalidSigningInformationException("아이디/비밀번호가 올바르지 않습니다."));
-        session.setAttribute("", user.getUserId());
+        session.setAttribute(USER_ID, user.getUserId());
         return UserLoginResponse.of(user);
     }
 }
