@@ -56,7 +56,7 @@ public class UserService {
         User user = userMapper.findByUserId(request.getUserId())
             .orElseThrow(() -> new InvalidSigningInformationException("등록 되지 않은 사용자입니다."));
 
-        if (validatedPassword(user.getPassword(), request.getPassword())) {
+        if (validatePassword(user.getPassword(), request.getPassword())) {
             throw new InvalidSigningInformationException("비밀번호가 올바르지 않습니다.");
         }
 
@@ -64,7 +64,7 @@ public class UserService {
         return UserLoginResponse.of(user);
     }
 
-    private boolean validatedPassword(String rawPassword, String encodedPassword) {
+    private boolean validatePassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
