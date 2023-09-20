@@ -18,14 +18,20 @@
   </select>
 
   <select id="findAll" resultType="com.flab.auctionhub.user.domain.User">
-    SELECT user_id, password, username, role_type, phone_number
+    SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
     FROM user;
   </select>
 
   <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.user.domain.User">
-    SELECT user_id, password, username, role_type, phone_number
+    SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
     FROM user
     WHERE id = #{id};
+  </select>
+
+  <select id="findByUserId" parameterType="String" resultType="com.flab.auctionhub.user.domain.User">
+    SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
+    FROM user
+    WHERE user_id = #{userId}
   </select>
 
 </mapper>

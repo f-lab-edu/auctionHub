@@ -39,6 +39,7 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+  type-handlers-package: com.flab.auctionhub.hadler
 
 ---
 # MySQL dev 환경
