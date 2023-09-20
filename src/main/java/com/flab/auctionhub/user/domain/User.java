@@ -30,7 +30,7 @@ public class User {
     /**
      * 역할
      */
-    private String roleType;
+    private UserRoleType roleType;
     /**
      * 휴대폰 번호
      */

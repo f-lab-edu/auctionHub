@@ -1,6 +1,7 @@
 package com.flab.auctionhub.user.dto.response;
 
 import com.flab.auctionhub.user.domain.User;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class UserLoginResponse {
     /**
      * 역할
      */
-    private String roleType;
+    private UserRoleType roleType;
     /**
      * 휴대폰 번호
      */
