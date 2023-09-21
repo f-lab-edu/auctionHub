@@ -33,6 +33,7 @@ logging:
         auctionhub:
           repository:
             mybatis: trace
+    root: debug
 
 mybatis:
   type-aliases-package: com.flab.auctionhub.domain
