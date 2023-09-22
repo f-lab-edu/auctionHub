@@ -3,6 +3,7 @@ plugins {
   id 'org.springframework.boot' version '3.1.2'
   id 'io.spring.dependency-management' version '1.1.2'
   id 'org.ec4j.editorconfig' version '0.0.3'
+  id 'jacoco'
 }
 
 group = 'com.flab'
@@ -42,3 +43,45 @@ editorconfig {
 }
 
 check.dependsOn editorconfigCheck
+
+// jacoco 설정 시작
+// https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:configuring_the_jacoco_plugin
+// 프로필을 설정하여 빌드를 할 수 있도록 주의. ex) SPRING_PROFILES_ACTIVE=local ./gradlew test
+jacoco {
+  // JaCoCo 버전
+  toolVersion = '0.8.10'
+  reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+  //  테스트결과 리포트를 저장할 경로 변경
+//  default는 "${project.reporting.baseDir}/jacoco"
+//  reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+test {
+  finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+  dependsOn test // tests are required to run before generating the report
+
+  reports {
+    xml.required = false
+    csv.required = false
+    html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+  }
+}
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      enabled = false
+      element = 'CLASS'
+      includes = ['org.gradle.*']
+
+      limit {
+        counter = 'LINE'
+        value = 'TOTALCOUNT'
+        maximum = 0.7
+      }
+    }
+  }
+}
+// jacoco 설정 끝
