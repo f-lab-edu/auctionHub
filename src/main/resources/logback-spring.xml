@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration sacn="true" scanPeriod="30 seconds">
+  <!-- 60초마다 설정 파일의 변경을 스캔 -->
+
+  <springProfile name="local">
+    <property resource="application.yml"/>
+  </springProfile>
+
+  <springProfile name="dev">
+    <property resource="application.yml"/>
+  </springProfile>
+
+  <springProfile name="release">
+    <property resource="application.yml"/>
+  </springProfile>
+  <!--설정 파일을 profile 별로 다르게 설정이 가능-->
+
+  <property name="CONSOLE_LOG_PATTERN"
+    value="%d{MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) --- [ %thread{10}] [%logger{36}]: %msg%n"/>
+  <!--로그 패턴 정의-->
+
+  <property name="logPath" value="./log"/>
+  <property name="FILE_NAME" value="auctionHub-logs"/>
+  <!--상수 값 정의-->
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <!--CONSOLE 이라는 이름의 로그 형태 정의, class - 콘솔에 로그를 찍음-->
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!--출력할 로그 인코더 설정 (PatternLayoutEncoder 는 default 설정이라 생략가능) -->
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <!--위의 property 로 정의한 콘솔 로그 패턴으로 출력-->
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--FILE 이라는 이름의 로그 형태 정의, class - 특정 시간 또는 크기를 기준으로 로그 파일을 생성 -->
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <!--error 레벨만 필터링 다른 레벨은 무시-->
+    <file>${logPath}/${FILE_NAME}.log</file>
+    <!--생성할 로그 파일 경로 + 이름-->
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!--파일 생성 정책 - 시간 기준 -->
+      <fileNamePattern>${logPath}/${FILE_NAME}_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxHistory>90</maxHistory>
+      <!--파일 최대 보관 기간 (90일) -->
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- 크기별 로그 파일 생성 -->
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 프로필별 로그 출력 설정 -->
+
+  <springProfile name="local">
+    <root level="DEBUG">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+    <!--전체 로그의 ERROR 레벨을 Appender "CONSOLE" 의 설정대로 출력-->
+    <logger name="com.flab.auctionhub" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+    </logger>
+    <!--root 로그에 오버라이딩 하지 않고(additivity=false) ERROR 레벨의 name 패키지를 CONSOLE, FILE appender 설정대로 적용 -->
+  </springProfile>
+
+  <springProfile name="dev">
+    <root level="DEBUG">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="com.flab.auctionhub" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name="release">
+    <root level="info">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+    </root>
+    <logger name="com.flab.auctionhub" level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+  </springProfile>
+</configuration>
