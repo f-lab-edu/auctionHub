@@ -40,7 +40,7 @@
       <onMismatch>DENY</onMismatch>
     </filter>
     <!--error 레벨만 필터링 다른 레벨은 무시-->
-    <file>${logPath}/${FILE_NAME}-json.log</file>
+    <file>${logPath}/${FILE_NAME}.log</file>
     <!--생성할 로그 파일 경로 + 이름-->
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
       <pattern>${CONSOLE_LOG_PATTERN}</pattern>
