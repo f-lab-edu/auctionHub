@@ -26,20 +26,20 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(UserController.class) // Spring MVC 애플리케이션을 테스트하기 위한 목적으로 해당 계층을 중심으로 필요한 빈들을 로드하여 테스트 수행하는데 사용되는 어노테이션
 class UserControllerTest {
 
-    @Autowired
+    @Autowired // 스프링 프레임워크에서 의존성 주입을 위해 사용되는 어노테이션
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockBean // 특정 빈을 테스트에서 의존하지 않도록 가짜 빈을 생성해주는 어노테이션
     private UserService userService;
 
-    @Autowired
+    @Autowired // 의존 객체의 타입에 해당하는 빈을 찾아 주입하는 어노테이션
     private ObjectMapper objectMapper;
 
-    @Test
-    @DisplayName("신규 회원을 등록한다.")
+    @Test // JUnit 에서 테스트 메서드를 식별하기 위해 사용되는 어노테이션
+    @DisplayName("신규 회원을 등록한다.") // JUnit5 에서 해당 테스트의 이름을 좀 더 의미 있게 정의하기 위해 사용되는 어노테이션
     void createUser() throws Exception {
         // given
         UserCreateRequest user = CreateUserInfo1();
