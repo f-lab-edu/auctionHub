@@ -74,15 +74,24 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
   violationRules {
     rule {
-      enabled = false
+      enabled = true
       element = 'CLASS'
-      includes = ['org.gradle.*']
+//      includes = ['org.gradle.*']
 
       limit {
         counter = 'LINE'
-        value = 'TOTALCOUNT'
-        maximum = 0.7
+        value = 'COVEREDRATIO'
+        minimum = 0.70
       }
+
+      excludes = [
+          '**.*Dto*',
+          '**.*Config*',
+          '**.*Exception*',
+          '**.*Response*',
+          '**.*Request*',
+          '**.*Application*',
+      ]
     }
   }
 }
