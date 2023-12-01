@@ -1,6 +1,5 @@
 package com.flab.auctionhub.user.domain;
 
-import com.flab.auctionhub.user.exception.UserNotFoundException;
 import com.flab.auctionhub.user.exception.WrongRoleCodeException;
 import java.util.Arrays;
 import lombok.Getter;

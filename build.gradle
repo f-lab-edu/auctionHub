@@ -31,6 +31,7 @@ dependencies {
   runtimeOnly 'com.h2database:h2'
   compileOnly 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
+  testImplementation group: 'org.junit-pioneer', name: 'junit-pioneer', version: '2.2.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -67,20 +68,31 @@ jacocoTestReport {
     csv.required = false
     html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
   }
+  finalizedBy jacocoTestCoverageVerification
 }
 
 jacocoTestCoverageVerification {
   violationRules {
     rule {
-      enabled = false
+      enabled = true
       element = 'CLASS'
-      includes = ['org.gradle.*']
+//      includes = ['org.gradle.*']
 
       limit {
         counter = 'LINE'
-        value = 'TOTALCOUNT'
-        maximum = 0.7
+        value = 'COVEREDRATIO'
+        minimum = 0.70
       }
+
+      excludes = [
+          '**.*Dto*',
+          '**.*Config*',
+          '**.*Exception*',
+          '**.*Response*',
+          '**.*Request*',
+          '**.*Application*',
+          '**.*Handler*',
+      ]
     }
   }
 }
