@@ -91,6 +91,7 @@ jacocoTestCoverageVerification {
           '**.*Response*',
           '**.*Request*',
           '**.*Application*',
+          '**.*Handler*',
       ]
     }
   }
