@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.flab.auctionhub.user.domain.User;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import com.flab.auctionhub.user.exception.InvalidSigningInformationException;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.util.List;
@@ -35,7 +36,16 @@ class UserMapperTest {
             .orElseThrow(() -> new InvalidSigningInformationException("등록 되지 않은 사용자입니다."));
 
         //then
+        assertThat(result.getId()).isNotNull();
         assertThat(result.getUserId()).isEqualTo(user.getUserId());
+        assertThat(result.getPassword()).isNotNull();
+        assertThat(result.getUsername()).isEqualTo(user.getUsername());
+        assertThat(result.getPhoneNumber()).isEqualTo(user.getPhoneNumber());
+        assertThat(result.getRoleType()).isEqualTo(UserRoleType.MEMBER);
+        assertThat(result.getCreatedAt()).isNotNull();
+        assertThat(result.getCreatedBy()).isEqualTo(user.getUserId());
+        assertThat(result.getUpdatedAt()).isNull();
+        assertThat(result.getUpdatedBy()).isNull();
     }
 
     @Test

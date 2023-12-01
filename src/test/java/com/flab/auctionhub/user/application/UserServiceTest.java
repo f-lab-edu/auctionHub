@@ -4,11 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.flab.auctionhub.user.domain.UserRoleType;
 import com.flab.auctionhub.user.dto.request.UserCreateRequest;
 import com.flab.auctionhub.user.dto.request.UserLoginRequest;
 import com.flab.auctionhub.user.dto.response.UserCreateResponse;
 import com.flab.auctionhub.user.dto.response.UserLoginResponse;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
+import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,8 +103,18 @@ class UserServiceTest {
         // then
         assertThat(userCreateResponse.getUserId()).isEqualTo(userCreateRequest.getUserId());
         assertThat(userCreateResponse.getUsername()).isEqualTo(userCreateRequest.getUsername());
-        assertThat(userCreateResponse.getPhoneNumber()).isEqualTo(
-            userCreateRequest.getPhoneNumber());
+        assertThat(userCreateResponse.getPhoneNumber()).isEqualTo(userCreateRequest.getPhoneNumber());
+        assertThat(userCreateResponse.getRoleType()).isEqualTo(UserRoleType.MEMBER);
+
+    }
+
+    @Test
+    @DisplayName("회원을 조회하였는데 존재하지 않다면 예외를 발생한다.")
+    void findByIdWithoutUser() {
+        // when // then
+        assertThatThrownBy(() -> userService.findById(1L))
+            .isInstanceOf(UserNotFoundException.class)
+            .hasMessage("해당 유저를 찾을 수 없습니다.");
     }
 
     @ParameterizedTest // JUnit5에서 매개변수화된 테스트를 작성할 때 사용되는 어노테이션
