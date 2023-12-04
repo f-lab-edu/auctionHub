@@ -1,20 +1,19 @@
-package com.flab.auctionhub.product.domain;
+package com.flab.auctionhub.product.dto.request;
 
+import com.flab.auctionhub.product.domain.Product;
+import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class Product {
-    /**
-     * 상품 번호
-     */
-    private Long id;
+@NoArgsConstructor
+public class ProductCreateRequest {
+
     /**
      * 상품 이름
      */
@@ -47,28 +46,18 @@ public class Product {
      * 시작 시긴
      */
     private LocalDateTime startedAt;
-    /**
-     * 마감 시간
-     */
-    private LocalDateTime endedAt;
-    /**
-     * 삭제 여부
-     */
-    private boolean isDeleted;
-    /**
-     * 등록 일시
-     */
-    private LocalDateTime createdAt;
-    /**
-     * 등록자
-     */
-    private String createdBy;
-    /**
-     * 수정 일시
-     */
-    private LocalDateTime updatedAt;
-    /**
-     * 수정자
-     */
-    private String updatedBy;
+
+    public Product toEntity() {
+        return Product.builder()
+            .name(this.name)
+            .description(this.description)
+            .sellingStatus(this.sellingStatus)
+            .quickPrice(this.quickPrice)
+            .startBidPrice(this.startBidPrice)
+            .minBidPrice(this.minBidPrice)
+            .currentBidPrice(this.currentBidPrice)
+            .startedAt(this.startedAt)
+            .endedAt(this.startedAt.plusDays(3))
+            .build();
+    }
 }
