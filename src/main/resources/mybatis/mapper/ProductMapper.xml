@@ -5,8 +5,8 @@
 <mapper namespace="com.flab.auctionhub.product.dao.ProductMapper" >
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at)
-    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{startedAt})
+    INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at, created_by)
+    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{startedAt}, #{createdBy})
     <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
       SELECT last_insert_id()
     </selectKey>

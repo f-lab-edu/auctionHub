@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductMapper {
 
-    Product save(Product product);
+    void save(Product product);
 
     List<Product> findAll();
 

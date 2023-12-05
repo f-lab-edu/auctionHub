@@ -39,10 +39,6 @@ public class ProductCreateRequest {
      */
     private int minBidPrice;
     /**
-     * 현재 입찰 금액
-     */
-    private int currentBidPrice;
-    /**
      * 시작 시긴
      */
     private LocalDateTime startedAt;
@@ -55,9 +51,9 @@ public class ProductCreateRequest {
             .quickPrice(this.quickPrice)
             .startBidPrice(this.startBidPrice)
             .minBidPrice(this.minBidPrice)
-            .currentBidPrice(this.currentBidPrice)
             .startedAt(this.startedAt)
             .endedAt(this.startedAt.plusDays(3))
+            .createdBy(this.name)
             .build();
     }
 }

@@ -16,8 +16,11 @@ public class ProductService {
 
     private final ProductMapper productMapper;
 
-    public Product createProduct(ProductCreateRequest request) {
-        return productMapper.save(request.toEntity());
+    public Long createProduct(ProductCreateRequest request) {
+        Product product = request.toEntity();
+        productMapper.save(product);
+        System.out.println(product.getId());
+        return product.getId();
     }
 
     public List<ProductResponse> getSellingProducts() {
