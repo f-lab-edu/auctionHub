@@ -4,15 +4,17 @@
 
 <mapper namespace="com.flab.auctionhub.category.dao.CategoryMapper">
 
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO category (name, created_by)
+    VALUES (#{name}, #{createdBy})
+    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
+      select last_insert_id()
+    </selectKey>
+  </insert>
+
   <select id="findAll" resultType="com.flab.auctionhub.category.domain.Category">
     SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
     FROM category;
-  </select>
-
-  <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.category.domain.Category">
-    SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
-    FROM category
-    WHERE id = #{id};
   </select>
 
 </mapper>

@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CategoryMapper {
+
+    void save(Category category);
+
     List<Category> findAll();
 
 }
