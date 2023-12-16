@@ -3,8 +3,8 @@ package com.flab.auctionhub.category.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.flab.auctionhub.category.domain.CategoryType;
-import com.flab.auctionhub.category.dto.request.CategoryRequest;
-import com.flab.auctionhub.category.dto.resoponse.CategoryResponse;
+import com.flab.auctionhub.category.api.request.CategoryRequest;
+import com.flab.auctionhub.category.application.response.CategoryResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class CategoryServiceTest {
             .build();
 
         // when
-        Long id = categoryService.createCategory(request);
+        Long id = categoryService.createCategory(request.toServiceRequest());
 
         // then
         assertThat(id).isNotNull();

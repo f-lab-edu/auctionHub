@@ -1,4 +1,4 @@
-package com.flab.auctionhub.category.dto.resoponse;
+package com.flab.auctionhub.category.application.response;
 
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;

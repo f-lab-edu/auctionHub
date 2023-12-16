@@ -1,4 +1,4 @@
-package com.flab.auctionhub.category.dto.request;
+package com.flab.auctionhub.category.application.request;
 
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequest {
+public class CategoryServiceRequest {
+
     /**
      * 카테고리 명
      */

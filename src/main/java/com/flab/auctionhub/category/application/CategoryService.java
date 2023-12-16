@@ -1,9 +1,9 @@
 package com.flab.auctionhub.category.application;
 
+import com.flab.auctionhub.category.application.request.CategoryServiceRequest;
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
-import com.flab.auctionhub.category.dto.request.CategoryRequest;
-import com.flab.auctionhub.category.dto.resoponse.CategoryResponse;
+import com.flab.auctionhub.category.application.response.CategoryResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryMapper categoryMapper;
 
     @Transactional
-    public Long createCategory(CategoryRequest request) {
+    public Long createCategory(CategoryServiceRequest request) {
         Category category = request.toEntity();
         categoryMapper.save(category);
         return category.getId();

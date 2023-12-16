@@ -1,6 +1,5 @@
 package com.flab.auctionhub.category.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.flab.auctionhub.category.exception.WrongCategoryValueException;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ public enum CategoryType {
 
     private final String value;
 
-    @JsonCreator
     public static CategoryType getCategoryName(String value) {
         return Arrays.stream(CategoryType.values()).filter(x -> x.getValue().equals(value))
             .findFirst().orElseThrow(() -> new WrongCategoryValueException("잘못된 카테고리 값을 입력하였습니다."));
