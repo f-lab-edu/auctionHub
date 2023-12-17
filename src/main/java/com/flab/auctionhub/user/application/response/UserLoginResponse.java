@@ -1,4 +1,4 @@
-package com.flab.auctionhub.user.dto.response;
+package com.flab.auctionhub.user.application.response;
 
 import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.domain.UserRoleType;
