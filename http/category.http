@@ -1,0 +1,10 @@
+### 카테고리를 생성한다.
+POST localhost:8080/category
+Content-Type: application/json
+
+{
+  "name": "남성의류"
+}
+
+### 카테고리 전체 조회
+GET localhost:8080/category

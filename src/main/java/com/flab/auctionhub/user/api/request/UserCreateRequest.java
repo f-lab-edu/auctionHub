@@ -1,6 +1,6 @@
-package com.flab.auctionhub.user.dto.request;
+package com.flab.auctionhub.user.api.request;
 
-import com.flab.auctionhub.user.domain.User;
+import com.flab.auctionhub.user.application.request.UserCreateServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Builder
@@ -40,13 +39,12 @@ public class UserCreateRequest {
     @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$", message = "휴대폰 번호 형식에 맞게 입력해 주세요.") // 문자열 값이 정규 표현식과 일치하는지를 검증하기 위한 어노테이션
     private String phoneNumber;
 
-    public User toEntity(PasswordEncoder passwordEncoder) {
-        return User.builder()
+    public UserCreateServiceRequest toServiceRequest() {
+        return UserCreateServiceRequest.builder()
             .userId(this.getUserId())
-            .password(passwordEncoder.encode(this.getPassword()))
+            .password(this.getPassword())
             .username(this.getUsername())
             .phoneNumber(this.getPhoneNumber())
-            .createdBy(this.getUsername())
             .build();
     }
 }
