@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.flab.auctionhub.user.application.request.UserCreateServiceRequest;
+import com.flab.auctionhub.user.application.request.UserLoginServiceRequest;
+import com.flab.auctionhub.user.application.response.UserCreateResponse;
+import com.flab.auctionhub.user.application.response.UserLoginResponse;
 import com.flab.auctionhub.user.domain.UserRoleType;
-import com.flab.auctionhub.user.dto.request.UserCreateRequest;
-import com.flab.auctionhub.user.dto.request.UserLoginRequest;
-import com.flab.auctionhub.user.dto.response.UserCreateResponse;
-import com.flab.auctionhub.user.dto.response.UserLoginResponse;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.util.List;
@@ -34,7 +34,7 @@ class UserServiceTest {
     @DisplayName("회원 1명을 생성하면 userId가 리턴된다.")
     void createUser() {
         // given
-        UserCreateRequest userCreateRequest = userCreateRequest("userId", "password", "username", "010-0000-0000");
+        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId", "password", "username", "010-0000-0000");
 
         // when
         Long userId = userService.createUser(userCreateRequest);
@@ -47,9 +47,9 @@ class UserServiceTest {
     @DisplayName("중복된 회원을 생성하면 예외가 발생한다.")
     void checkUserIdDuplication() {
         // given
-        UserCreateRequest userCreateRequest1 = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest1 = userCreateRequest("userId", "password", "username",
             "010-0000-0000");
-        UserCreateRequest userCreateRequest2 = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest2 = userCreateRequest("userId", "password", "username",
             "010-0000-0000");
         userService.createUser(userCreateRequest1);
 
@@ -63,11 +63,11 @@ class UserServiceTest {
     @DisplayName("회원 3명을 생성하여 전체 회원을 조회한다.")
     void findAllUser() {
         // given
-        UserCreateRequest userCreateRequest1 = userCreateRequest("userId1", "password1", "username",
+        UserCreateServiceRequest userCreateRequest1 = userCreateRequest("userId1", "password1", "username",
             "010-0000-0000");
-        UserCreateRequest userCreateRequest2 = userCreateRequest("userId2", "password2", "username",
+        UserCreateServiceRequest userCreateRequest2 = userCreateRequest("userId2", "password2", "username",
             "010-1111-1111");
-        UserCreateRequest userCreateRequest3 = userCreateRequest("userId3", "password3", "username",
+        UserCreateServiceRequest userCreateRequest3 = userCreateRequest("userId3", "password3", "username",
             "010-2222-2222");
         userService.createUser(userCreateRequest1);
         userService.createUser(userCreateRequest2);
@@ -93,7 +93,7 @@ class UserServiceTest {
     @DisplayName("회원을 등록하고 PK값인 id를 이용하여 회원을 조회한다.")
     void findById() {
         // given
-        UserCreateRequest userCreateRequest = userCreateRequest("userId1", "password1", "username",
+        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId1", "password1", "username",
             "010-0000-0000");
         Long userCreateRequestId = userService.createUser(userCreateRequest);
 
@@ -127,9 +127,9 @@ class UserServiceTest {
         ]
         """) // JSON 형식의 데이터를 매개변수로 제공하는데 사용되는 어노테이션
     @DisplayName("회원을 등록하고 로그인한다.")
-    void login(UserLoginRequest userLoginRequest) {
+    void login(UserLoginServiceRequest userLoginRequest) {
         // given
-        UserCreateRequest userCreateRequest = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId", "password", "username",
             "010-0000-0000");
         userService.createUser(userCreateRequest);
         MockHttpSession session = new MockHttpSession();
@@ -141,9 +141,9 @@ class UserServiceTest {
         assertThat(userLoginResponse.getUserId()).isEqualTo(userCreateRequest.getUserId());
     }
 
-    private UserCreateRequest userCreateRequest(String userId, String password, String username,
+    private UserCreateServiceRequest userCreateRequest(String userId, String password, String username,
         String phoneNumber) {
-        return UserCreateRequest.builder()
+        return UserCreateServiceRequest.builder()
             .userId(userId)
             .password(password)
             .username(username)
