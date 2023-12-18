@@ -36,7 +36,7 @@ public class UserCreateServiceRequest {
             .password(passwordEncoder.encode(this.getPassword()))
             .username(this.getUsername())
             .phoneNumber(this.getPhoneNumber())
-            .createdBy(this.getUsername())
+            .createdBy(this.getUserId())
             .build();
     }
 }

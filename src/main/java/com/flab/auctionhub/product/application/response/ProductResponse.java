@@ -1,4 +1,4 @@
-package com.flab.auctionhub.product.dto.response;
+package com.flab.auctionhub.product.application.response;
 
 import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;

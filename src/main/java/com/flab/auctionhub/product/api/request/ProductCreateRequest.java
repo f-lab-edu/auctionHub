@@ -1,12 +1,16 @@
-package com.flab.auctionhub.product.dto.request;
+package com.flab.auctionhub.product.api.request;
 
-import com.flab.auctionhub.product.domain.Product;
+import com.flab.auctionhub.product.application.request.ProductCreateServiceRequest;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Builder
@@ -17,6 +21,7 @@ public class ProductCreateRequest {
     /**
      * 상품 이름
      */
+    @NotBlank(message = "상품 이름은 필수입니다.")
     private String name;
     /**
      * 상품 설명
@@ -25,26 +30,41 @@ public class ProductCreateRequest {
     /**
      * 판매 상태
      */
+    @NotNull(message = "상품 상태는 필수입니다.")
     private ProductSellingStatus sellingStatus;
     /**
      * 즉시 구매가
      */
+    @Positive(message = "즉시 구매가는 양수여야 합니다.")
     private int quickPrice;
     /**
      * 시작 입찰 금액
      */
+    @Positive(message = "시작 입착액은 양수여야 합니다.")
     private int startBidPrice;
     /**
      * 최소 입찰 금액
      */
+    @Positive(message = "최소 입착액은 양수여야 합니다.")
     private int minBidPrice;
     /**
-     * 시작 시긴
+     * 시작 시간
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:MM:SS")
     private LocalDateTime startedAt;
+    /**
+     * 유저 아이디
+     */
+    @NotNull
+    private Long userId;
+    /**
+     * 카테고리 아이디
+     */
+    @NotNull
+    private Long categoryId;
 
-    public Product toEntity() {
-        return Product.builder()
+    public ProductCreateServiceRequest toServiceRequest() {
+        return ProductCreateServiceRequest.builder()
             .name(this.name)
             .description(this.description)
             .sellingStatus(this.sellingStatus)
@@ -52,8 +72,10 @@ public class ProductCreateRequest {
             .startBidPrice(this.startBidPrice)
             .minBidPrice(this.minBidPrice)
             .startedAt(this.startedAt)
-            .endedAt(this.startedAt.plusDays(3))
-            .createdBy(this.name)
+            .userId(this.userId)
+            .categoryId(this.categoryId)
             .build();
+
     }
+
 }
