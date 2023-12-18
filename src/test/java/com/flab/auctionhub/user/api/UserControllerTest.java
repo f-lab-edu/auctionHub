@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.domain.UserRoleType;
-import com.flab.auctionhub.user.dto.request.UserCreateRequest;
-import com.flab.auctionhub.user.dto.request.UserLoginRequest;
-import com.flab.auctionhub.user.dto.response.UserCreateResponse;
-import com.flab.auctionhub.user.dto.response.UserLoginResponse;
+import com.flab.auctionhub.user.api.request.UserCreateRequest;
+import com.flab.auctionhub.user.api.request.UserLoginRequest;
+import com.flab.auctionhub.user.application.response.UserCreateResponse;
+import com.flab.auctionhub.user.application.response.UserLoginResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,6 @@ class UserControllerTest {
     void createUser() throws Exception {
         // given
         UserCreateRequest user = CreateUserInfo1();
-        userService.createUser(user);
 
         // when // then
         mockMvc.perform(
@@ -64,7 +63,7 @@ class UserControllerTest {
             .username("testusername")
             .phoneNumber("010-1234-1234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -86,7 +85,7 @@ class UserControllerTest {
             .username("testusername")
             .phoneNumber("010-1234-1234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -108,7 +107,7 @@ class UserControllerTest {
             .password("testpassword")
             .phoneNumber("010-1234-1234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -130,7 +129,7 @@ class UserControllerTest {
             .password("testpassword")
             .username("testusername")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -153,7 +152,7 @@ class UserControllerTest {
             .username("testusername")
             .phoneNumber("010-1234-1234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -176,7 +175,7 @@ class UserControllerTest {
             .username("testusername")
             .phoneNumber("010-1234-1234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -199,7 +198,7 @@ class UserControllerTest {
             .username("testusername")
             .phoneNumber("01012341234")
             .build();
-        userService.createUser(user);
+        userService.createUser(user.toServiceRequest());
 
         // when // then
         mockMvc.perform(
@@ -251,7 +250,7 @@ class UserControllerTest {
     void findById() throws Exception {
         // given
         UserCreateRequest userCreateRequest = CreateUserInfo1();
-        Long id = userService.createUser(userCreateRequest);
+        Long id = userService.createUser(userCreateRequest.toServiceRequest());
         UserCreateResponse userCreateResponse = new UserCreateResponse(
             userCreateRequest.getUserId(), userCreateRequest.getUsername(), UserRoleType.MEMBER,
             userCreateRequest.getPhoneNumber());
@@ -271,7 +270,7 @@ class UserControllerTest {
     void login() throws Exception {
         // given
         UserCreateRequest userCreateRequest = CreateUserInfo1();
-        userService.createUser(userCreateRequest);
+        userService.createUser(userCreateRequest.toServiceRequest());
         UserLoginRequest userLoginRequest = UserLoginRequest.builder()
             .userId(userCreateRequest.getUserId())
             .password(userCreateRequest.getPassword())
@@ -282,7 +281,7 @@ class UserControllerTest {
             userCreateRequest.getUsername(), UserRoleType.MEMBER,
             userCreateRequest.getPhoneNumber());
 
-        when(userService.login(userLoginRequest, session)).thenReturn(userLoginResponse);
+        when(userService.login(userLoginRequest.toServiceRequest(), session)).thenReturn(userLoginResponse);
 
         // when // then
         mockMvc.perform(

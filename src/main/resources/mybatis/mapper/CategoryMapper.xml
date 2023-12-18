@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.auctionhub.category.dao.CategoryMapper">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO category (name, created_by)
+    VALUES (#{name}, #{createdBy})
+    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
+      select last_insert_id()
+    </selectKey>
+  </insert>
+
+  <select id="findAll" resultType="com.flab.auctionhub.category.domain.Category">
+    SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
+    FROM category;
+  </select>
+
+</mapper>
