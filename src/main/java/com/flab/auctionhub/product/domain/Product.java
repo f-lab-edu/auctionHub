@@ -71,4 +71,12 @@ public class Product {
      * 수정자
      */
     private String updatedBy;
+    /**
+     * 유저 아이디
+     */
+    private Long userId;
+    /**
+     * 카테고리 아이디
+     */
+    private Long categoryId;
 }
