@@ -35,17 +35,17 @@ public class ProductCreateRequest {
     /**
      * 즉시 구매가
      */
-    @Positive(message = "즉시 구매가는 양수여야 합니다.")
+    @Positive(message = "즉시 구매가는 0원을 초과하여야 합니다.")
     private int quickPrice;
     /**
      * 시작 입찰 금액
      */
-    @Positive(message = "시작 입착액은 양수여야 합니다.")
+    @Positive(message = "시작 입착액은 0원을 초과하여야 합니다.")
     private int startBidPrice;
     /**
      * 최소 입찰 금액
      */
-    @Positive(message = "최소 입착액은 양수여야 합니다.")
+    @Positive(message = "최소 입착액은 0원을 초과하여야 합니다.")
     private int minBidPrice;
     /**
      * 시작 시간
