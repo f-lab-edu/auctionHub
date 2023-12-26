@@ -20,6 +20,15 @@
 
   </select>
 
+  <select id="findById" resultType="com.flab.auctionhub.product.domain.Product">
+    SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
+           current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
+           ended_at
+    FROM product
+    WHERE id = #{id};
+
+  </select>
+
   <select id="findAllBySellingStatusIn" resultType="com.flab.auctionhub.product.domain.Product">
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,

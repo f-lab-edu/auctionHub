@@ -1,6 +1,7 @@
 package com.flab.auctionhub.common.exception;
 
 import com.flab.auctionhub.category.exception.WrongCategoryValueException;
+import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.time.LocalDateTime;
@@ -49,6 +50,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WrongCategoryValueException.class)
     public ResponseEntity<ErrorResponse> handleWrongCategoryValueException(WrongCategoryValueException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleWrongCategoryValueException(ProductNotFoundException exception) {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 }

@@ -5,6 +5,7 @@ import com.flab.auctionhub.product.application.response.ProductResponse;
 import com.flab.auctionhub.product.dao.ProductMapper;
 import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
+import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import com.flab.auctionhub.user.application.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,13 @@ public class ProductService {
         return productList.stream()
             .map(ProductResponse::of)
             .collect(Collectors.toList());
+    }
+
+    public ProductResponse findById(Long id) {
+        return productMapper.findById(id)
+            .map(ProductResponse::of)
+            .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
+
     }
 
     public List<ProductResponse> findAllProduct() {
