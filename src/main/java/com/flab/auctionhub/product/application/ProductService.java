@@ -1,6 +1,8 @@
 package com.flab.auctionhub.product.application;
 
+import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
 import com.flab.auctionhub.product.application.request.ProductCreateServiceRequest;
+import com.flab.auctionhub.product.application.request.ProductUpdateServiceRequest;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import com.flab.auctionhub.product.dao.ProductMapper;
 import com.flab.auctionhub.product.domain.Product;
@@ -47,7 +49,12 @@ public class ProductService {
         return productMapper.findById(id)
             .map(ProductResponse::of)
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
-
+    }
+    public ProductResponse update(ProductUpdateServiceRequest request) {
+        Product product = request.toEntity();
+        return productMapper.update(product)
+            .map(ProductResponse::of)
+            .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
     }
 
     public List<ProductResponse> findAllProduct() {

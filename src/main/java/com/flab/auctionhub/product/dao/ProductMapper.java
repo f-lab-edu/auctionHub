@@ -15,6 +15,8 @@ public interface ProductMapper {
 
     Optional<Product> findById(Long id);
 
+    Optional<Product> update(Product product);
+
     List<Product> findAllBySellingStatusIn(List<ProductSellingStatus> sellingTypes);
 
 }

@@ -20,7 +20,7 @@
 
   </select>
 
-  <select id="findById" resultType="com.flab.auctionhub.product.domain.Product">
+  <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.product.domain.Product">
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
            ended_at
@@ -28,6 +28,20 @@
     WHERE id = #{id};
 
   </select>
+
+  <update id="update">
+    UPDATE product
+    SET name = #{name},
+        description = #{description},
+        selling_status = #{sellingStatus},
+        quick_price = #{quickPrice},
+        start_bid_price = #{startBidPrice},
+        min_bid_price = #{minBidPrice},
+        started_at = #{startedAt},
+        ended_at = #{endedAt},
+        created_by = #{createdBy}
+    WHERE id = #{id};
+  </update>
 
   <select id="findAllBySellingStatusIn" resultType="com.flab.auctionhub.product.domain.Product">
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,

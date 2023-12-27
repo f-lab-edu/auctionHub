@@ -1,5 +1,6 @@
 package com.flab.auctionhub.product.api;
 
+import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.application.response.ProductResponse;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +37,12 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
         ProductResponse product = productService.findById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @PutMapping("/products")
+    public ResponseEntity<ProductResponse> update(@RequestBody @Validated ProductUpdateRequest request) {
+        ProductResponse product = productService.update(request.toServiceRequest());
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
