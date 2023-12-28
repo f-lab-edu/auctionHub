@@ -25,14 +25,14 @@ PUT localhost:8080/products
 Content-Type: application/json
 
 {
-"id" : 1,
-"name": "나이키 슈즈111",
-"description": "정품이고 280입니다.111",
-"sellingStatus": "SELLING",
-"quickPrice": "50000",
-"startBidPrice": "2000",
-"minBidPrice": "2000",
-"startedAt": "2023-12-19T05:44:37",
+  "id" : "1",
+  "name": "나이키 슈즈111",
+  "description": "정품이고 280입니다.111",
+  "sellingStatus": "SELLING",
+  "quickPrice": "50000",
+  "startBidPrice": "2000",
+  "minBidPrice": "2000",
+  "startedAt": "2023-12-19T05:44:37"
 }
 
 ### 판매중, 판매보류 상품 조회

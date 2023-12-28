@@ -26,20 +26,19 @@
            ended_at
     FROM product
     WHERE id = #{id};
-
   </select>
 
   <update id="update">
     UPDATE product
-    SET name = #{name},
-        description = #{description},
-        selling_status = #{sellingStatus},
-        quick_price = #{quickPrice},
+    SET name            = #{name},
+        description     = #{description},
+        selling_status  = #{sellingStatus},
+        quick_price     = #{quickPrice},
         start_bid_price = #{startBidPrice},
-        min_bid_price = #{minBidPrice},
-        started_at = #{startedAt},
-        ended_at = #{endedAt},
-        created_by = #{createdBy}
+        min_bid_price   = #{minBidPrice},
+        started_at      = #{startedAt},
+        ended_at        = #{endedAt},
+        created_by      = #{createdBy}
     WHERE id = #{id};
   </update>
 
@@ -49,7 +48,6 @@
            ended_at, user_id, category_id
     FROM product
     WHERE selling_status = '판매중' OR selling_status = '판매보류';
-
   </select>
 
 
