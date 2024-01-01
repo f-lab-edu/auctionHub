@@ -52,8 +52,8 @@ public class ProductController {
     }
 
     /**
-     *
-     * @param request
+     * 상품 수정을 한다.
+     * @param request 상품 수정에 필요한정보
      */
     @PutMapping("/products")
     public ResponseEntity<ProductResponse> update(@RequestBody @Validated ProductUpdateRequest request) {
@@ -61,6 +61,9 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+    /**
+     * 판매중, 판매대기인 상품을 조회한다.
+     */
     @GetMapping("/products/selling")
     public ResponseEntity<List<ProductResponse>> getSellingProducts() {
         List<ProductResponse> productList = productService.getSellingProducts();

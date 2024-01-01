@@ -11,6 +11,7 @@ import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import com.flab.auctionhub.user.application.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.flab.auctionhub.user.application.response.UserCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +34,10 @@ public class ProductService {
     @Transactional
     public Long createProduct(ProductCreateServiceRequest request) {
         // 회원 여부 조회
-        userService.findById(request.getUserId());
+        UserCreateResponse userCreateResponse = userService.findById(request.getUserId());
         // 카테고리 존재 여부 조회
         categoryService.findById(request.getCategoryId());
-        Product product = request.toEntity();
+        Product product = request.toEntity(userCreateResponse.getUserId());
         productMapper.save(product);
         return product.getId();
     }

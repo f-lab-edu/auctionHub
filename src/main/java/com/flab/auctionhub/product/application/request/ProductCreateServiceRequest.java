@@ -51,7 +51,7 @@ public class ProductCreateServiceRequest {
      */
     private Long categoryId;
 
-    public Product toEntity() {
+    public Product toEntity(String userId) {
         return Product.builder()
             .name(this.name)
             .description(this.description)
@@ -61,7 +61,7 @@ public class ProductCreateServiceRequest {
             .minBidPrice(this.minBidPrice)
             .startedAt(this.startedAt)
             .endedAt(this.startedAt.plusDays(3))
-            .createdBy(this.name)
+            .createdBy(userId)
             .userId(this.userId)
             .categoryId(this.categoryId)
             .build();

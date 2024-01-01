@@ -15,7 +15,7 @@
   <select id="findAll" resultType="com.flab.auctionhub.product.domain.Product">
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
-           ended_at
+           ended_at, user_id, category_id
     FROM product;
 
   </select>
@@ -23,7 +23,7 @@
   <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.product.domain.Product">
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
-           ended_at
+           ended_at, user_id, category_id
     FROM product
     WHERE id = #{id};
   </select>
