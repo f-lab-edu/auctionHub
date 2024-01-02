@@ -11,6 +11,8 @@ public interface ProductMapper {
 
     void save(Product product);
 
+    void saveAll(List<Product> productList);
+
     List<Product> findAll();
 
     Optional<Product> findById(Long id);
