@@ -2,15 +2,15 @@
 <configuration sacn="true" scanPeriod="30 seconds">
   <!-- 60초마다 설정 파일의 변경을 스캔 -->
 
-  <springProfile name="local">
-    <property resource="application.yml"/>
-  </springProfile>
-
   <springProfile name="dev">
     <property resource="application.yml"/>
   </springProfile>
 
-  <springProfile name="release">
+  <springProfile name="test">
+    <property resource="application.yml"/>
+  </springProfile>
+
+  <springProfile name="prod">
     <property resource="application.yml"/>
   </springProfile>
   <!--설정 파일을 profile 별로 다르게 설정이 가능-->
@@ -60,7 +60,7 @@
 
   <!-- 프로필별 로그 출력 설정 -->
 
-  <springProfile name="local">
+  <springProfile name="dev">
     <root level="DEBUG">
       <appender-ref ref="CONSOLE"/>
     </root>
@@ -72,7 +72,7 @@
     <!--root 로그에 오버라이딩 하지 않고(additivity=false) ERROR 레벨의 name 패키지를 CONSOLE, FILE appender 설정대로 적용 -->
   </springProfile>
 
-  <springProfile name="dev">
+  <springProfile name="test">
     <root level="DEBUG">
       <appender-ref ref="CONSOLE"/>
     </root>
@@ -82,7 +82,7 @@
     </logger>
   </springProfile>
 
-  <springProfile name="release">
+  <springProfile name="prod">
     <root level="info">
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="FILE"/>
