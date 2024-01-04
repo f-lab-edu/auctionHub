@@ -11,6 +11,9 @@ import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.flab.auctionhub.user.dao.UserMapper;
+import com.flab.auctionhub.user.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +21,30 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @Transactional
 @SpringBootTest
 class ProductMapperTest {
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     private ProductMapper productMapper;
+
+    User user;
+
+    @BeforeEach
+    void BeforeEach() {
+        user = User.builder()
+            .userId("userId")
+            .password("testpassword")
+            .username("username")
+            .phoneNumber("010-0000-0000")
+            .createdBy("userId")
+            .build();
+        userMapper.save(user);
+    }
 
     @Test
     @DisplayName("상품 등록을 테스트한다.")
@@ -52,7 +72,7 @@ class ProductMapperTest {
         assertThat(result.getCreatedBy()).isEqualTo(ADMIN.getValue());
         assertThat(result.getUpdatedAt()).isNull();
         assertThat(result.getUpdatedBy()).isNull();
-        assertThat(result.getUserId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(user.getId());
         assertThat(result.getCategoryId()).isEqualTo(1L);
     }
 
@@ -95,7 +115,7 @@ class ProductMapperTest {
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .createdBy(ADMIN.getValue())
-            .userId(1L)
+            .userId(user.getId())
             .categoryId(1L)
             .build();
 
@@ -120,7 +140,7 @@ class ProductMapperTest {
         assertThat(result.getCreatedBy()).isEqualTo(ADMIN.getValue());
         assertThat(result.getUpdatedAt()).isNull();
         assertThat(result.getUpdatedBy()).isNull();
-        assertThat(result.getUserId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(user.getId());
         assertThat(result.getCategoryId()).isEqualTo(1L);
     }
 
@@ -157,7 +177,7 @@ class ProductMapperTest {
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .createdBy(ADMIN.getValue())
-            .userId(1L)
+            .userId(user.getId())
             .categoryId(1L)
             .build();
     }
