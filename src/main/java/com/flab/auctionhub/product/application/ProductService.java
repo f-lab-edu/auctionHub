@@ -9,6 +9,7 @@ import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import com.flab.auctionhub.user.application.UserService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.flab.auctionhub.user.application.response.UserCreateResponse;
@@ -40,6 +41,26 @@ public class ProductService {
         Product product = request.toEntity(userCreateResponse.getUserId());
         productMapper.save(product);
         return product.getId();
+    }
+
+    /**
+     * 상품 여러개를 등록한다
+     * @param request 상품 등록에 필요한 정보
+     * @return
+     */
+    @Transactional
+    public List<Long> createProducts(List<ProductCreateServiceRequest> request) {
+        List<Product> productList = new ArrayList<>();
+        // 회원 여부 조회
+        for (ProductCreateServiceRequest productCreateServiceRequest : request) {
+            UserCreateResponse userCreateResponse = userService.findById(productCreateServiceRequest.getUserId());
+            categoryService.findById(productCreateServiceRequest.getCategoryId());
+            productList.add(productCreateServiceRequest.toEntity(userCreateResponse.getUserId()));
+        }
+        productMapper.saveAll(productList);
+        return productList.stream()
+            .map(product -> product.getId())
+            .collect(Collectors.toList());
     }
 
     /**

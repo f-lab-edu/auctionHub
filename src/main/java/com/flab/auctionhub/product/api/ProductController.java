@@ -1,10 +1,11 @@
 package com.flab.auctionhub.product.api;
 
+import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
 import com.flab.auctionhub.product.application.ProductService;
-import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ProductController {
 
     /**
      * 상품을 등록한다.
-     * @param request 상품 등록에 필요한정보
+     * @param request 상품 등록에 필요한 정보
      */
     @PostMapping("/products")
     public ResponseEntity<Long> createProduct(@RequestBody @Validated ProductCreateRequest request) {
