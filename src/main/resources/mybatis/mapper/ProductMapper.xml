@@ -12,15 +12,12 @@
     </selectKey>
   </insert>
 
-  <insert id="saveAll" useGeneratedKeys="true" keyProperty="id">
+  <insert id="saveAll" useGeneratedKeys="true" keyProperty="id" >
     INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at, ended_at, created_by, user_id, category_id)
     VALUES
            <foreach collection="list" index="index" item="item" separator=",">
-                (#{item.name}, #{item.description}, #{item.sellingStatus}, #{item.quickPrice}, #{item.startBidPrice}, #{item.minBidPrice}, #{item.startedAt}, #{item.endedAt}, #{item.createdBy}, #{item.userId}, #{item.categoryId})
+             (#{item.name}, #{item.description}, #{item.sellingStatus}, #{item.quickPrice}, #{item.startBidPrice}, #{item.minBidPrice}, #{item.startedAt}, #{item.endedAt}, #{item.createdBy}, #{item.userId}, #{item.categoryId})
            </foreach>
-    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
-      SELECT last_insert_id()
-    </selectKey>
   </insert>
 
   <select id="findAll" resultType="com.flab.auctionhub.product.domain.Product">

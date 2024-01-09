@@ -51,15 +51,19 @@ public class ProductService {
     @Transactional
     public List<Long> createProducts(List<ProductCreateServiceRequest> request) {
         List<Product> productList = new ArrayList<>();
-        // 회원 여부 조회
+
         for (ProductCreateServiceRequest productCreateServiceRequest : request) {
+            // 회원 여부 조회
             UserCreateResponse userCreateResponse = userService.findById(productCreateServiceRequest.getUserId());
+            // 카테고리 존재 여부 조회
             categoryService.findById(productCreateServiceRequest.getCategoryId());
-            productList.add(productCreateServiceRequest.toEntity(userCreateResponse.getUserId()));
+            Product product = productCreateServiceRequest.toEntity(userCreateResponse.getUserId());
+            productList.add(product);
         }
         productMapper.saveAll(productList);
+
         return productList.stream()
-            .map(product -> product.getId())
+            .map(Product::getId)
             .collect(Collectors.toList());
     }
 
