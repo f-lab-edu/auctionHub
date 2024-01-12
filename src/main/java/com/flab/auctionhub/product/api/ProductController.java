@@ -23,14 +23,27 @@ public class ProductController {
 
     private final ProductService productService;
 
+//    /**
+//     * 상품을 등록한다.
+//     * @param request 상품 등록에 필요한 정보
+//     */
+//    @PostMapping("/products")
+//    public ResponseEntity<Long> createProduct(@RequestBody @Validated ProductCreateRequest request) {
+//        Long id = productService.createProduct(request.toServiceRequest());
+//        return new ResponseEntity<>(id, HttpStatus.CREATED);
+//    }
+
     /**
      * 상품을 등록한다.
      * @param request 상품 등록에 필요한 정보
      */
     @PostMapping("/products")
-    public ResponseEntity<Long> createProduct(@RequestBody @Validated ProductCreateRequest request) {
-        Long id = productService.createProduct(request.toServiceRequest());
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+    public ResponseEntity<List<Long>> createProducts(@RequestBody @Validated List<ProductCreateRequest> request) {
+        List<Long> productListId = productService.createProducts(
+            request.stream()
+                .map(productCreateRequest -> productCreateRequest.toServiceRequest())
+                .collect(Collectors.toList()));
+        return new ResponseEntity<>(productListId, HttpStatus.CREATED);
     }
 
     /**
