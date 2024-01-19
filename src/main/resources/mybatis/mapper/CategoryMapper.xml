@@ -17,4 +17,9 @@
     FROM category;
   </select>
 
+  <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.category.domain.Category">
+    SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
+    FROM category
+    WHERE id = #{id};
+  </select>
 </mapper>

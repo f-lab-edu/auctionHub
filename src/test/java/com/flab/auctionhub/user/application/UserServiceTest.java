@@ -22,7 +22,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("local") // 특정 프로파일이 활성화된 상태에서 테스트를 실행할 때 사용되는 어노테이션
+@ActiveProfiles("test") // 특정 프로파일이 활성화된 상태에서 테스트를 실행할 때 사용되는 어노테이션
 @Transactional // 테스트 메서드가 트랜잭션내에서 실행되어, 테스트 수행중에 데이터베이스 조작이 발생하더라도 트랜잭션이 롤백되어 데이터베이스 상태가 변경되지 않게 하는 어노테이션
 @SpringBootTest // 스프링 애플리케이션 컨텍스트를 로드하고, 테스트 환경을 설정하여 통합 테스트를 수행하는 어노테이션
 class UserServiceTest {

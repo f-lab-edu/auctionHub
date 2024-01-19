@@ -6,6 +6,7 @@ import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.application.response.CategoryResponse;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.flab.auctionhub.category.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,4 +31,10 @@ public class CategoryService {
             .collect(Collectors.toList());
     }
 
+    public CategoryResponse findById(Long id) {
+        return categoryMapper.findById(id)
+            .map(CategoryResponse::of)
+            .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));
+
+    }
 }
