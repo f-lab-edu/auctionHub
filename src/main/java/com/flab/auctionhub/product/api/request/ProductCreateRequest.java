@@ -40,27 +40,28 @@ public class ProductCreateRequest {
     /**
      * 시작 입찰 금액
      */
-    @Positive(message = "시작 입착액은 0원을 초과하여야 합니다.")
+    @Positive(message = "시작 입찰액은 0원을 초과하여야 합니다.")
     private int startBidPrice;
     /**
      * 최소 입찰 금액
      */
-    @Positive(message = "최소 입착액은 0원을 초과하여야 합니다.")
+    @Positive(message = "최소 입찰액은 0원을 초과하여야 합니다.")
     private int minBidPrice;
     /**
      * 시작 시간
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:MM:SS")
+    @NotNull(message = "경매 시작시간은 필수입니다.")
     private LocalDateTime startedAt;
     /**
-     * 유저 아이디
+     * 회원 번호
      */
-    @NotNull
+    @NotNull(message = "회원 번호는 필수 입니다.")
     private Long userId;
     /**
-     * 카테고리 아이디
+     * 카테고리 번호
      */
-    @NotNull
+    @NotNull(message = "카테고리 번호는 필수 입니다.")
     private Long categoryId;
 
     public ProductCreateServiceRequest toServiceRequest() {
@@ -75,7 +76,5 @@ public class ProductCreateRequest {
             .userId(this.userId)
             .categoryId(this.categoryId)
             .build();
-
     }
-
 }

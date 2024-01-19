@@ -1,7 +1,7 @@
 package com.flab.auctionhub.product.api;
 
-import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
+import com.flab.auctionhub.product.api.request.ProductsCreateRequest;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import java.util.List;
@@ -23,26 +23,17 @@ public class ProductController {
 
     private final ProductService productService;
 
-//    /**
-//     * 상품을 등록한다.
-//     * @param request 상품 등록에 필요한 정보
-//     */
-//    @PostMapping("/products")
-//    public ResponseEntity<Long> createProduct(@RequestBody @Validated ProductCreateRequest request) {
-//        Long id = productService.createProduct(request.toServiceRequest());
-//        return new ResponseEntity<>(id, HttpStatus.CREATED);
-//    }
-
     /**
      * 상품을 등록한다.
      * @param request 상품 등록에 필요한 정보
      */
     @PostMapping("/products")
-    public ResponseEntity<List<Long>> createProducts(@RequestBody @Validated List<ProductCreateRequest> request) {
+    public ResponseEntity<List<Long>> createProducts(@RequestBody @Validated ProductsCreateRequest request) {
         List<Long> productListId = productService.createProducts(
-            request.stream()
+            request.getProductCreateRequestList().stream()
                 .map(productCreateRequest -> productCreateRequest.toServiceRequest())
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList())
+        );
         return new ResponseEntity<>(productListId, HttpStatus.CREATED);
     }
 

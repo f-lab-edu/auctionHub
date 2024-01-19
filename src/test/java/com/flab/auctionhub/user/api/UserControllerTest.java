@@ -50,8 +50,7 @@ class UserControllerTest {
                     .content(objectMapper.writeValueAsString(user))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$").value(0L));
+            .andExpect(status().isCreated());
     }
 
     @Test

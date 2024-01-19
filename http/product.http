@@ -27,8 +27,8 @@ Content-Type: application/json
 
 {
   "id" : "1",
-  "name": "나이키 슈즈111",
-  "description": "정품이고 280입니다.111",
+  "name": "나이키 슈즈",
+  "description": "정품이고 280입니다.",
   "sellingStatus": "SELLING",
   "quickPrice": "50000",
   "startBidPrice": "2000",
