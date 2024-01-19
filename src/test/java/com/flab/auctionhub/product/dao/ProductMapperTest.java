@@ -64,7 +64,7 @@ class ProductMapperTest {
         assertThat(result.getQuickPrice()).isEqualTo(product.getQuickPrice());
         assertThat(result.getStartBidPrice()).isEqualTo(product.getStartBidPrice());
         assertThat(result.getMinBidPrice()).isEqualTo(product.getMinBidPrice());
-        assertThat(result.getCurrentBidPrice()).isEqualTo(0);
+        assertThat(result.getCurrentBidPrice()).isZero();
         assertThat(result.getStartedAt()).isEqualTo(product.getStartedAt());
         assertThat(result.getEndedAt()).isEqualTo(product.getEndedAt());
         assertThat(result.isDeleted()).isFalse();
@@ -132,7 +132,7 @@ class ProductMapperTest {
         assertThat(result.getQuickPrice()).isEqualTo(updateProduct.getQuickPrice());
         assertThat(result.getStartBidPrice()).isEqualTo(updateProduct.getStartBidPrice());
         assertThat(result.getMinBidPrice()).isEqualTo(updateProduct.getMinBidPrice());
-        assertThat(result.getCurrentBidPrice()).isEqualTo(0);
+        assertThat(result.getCurrentBidPrice()).isZero();
         assertThat(result.getStartedAt()).isEqualTo(updateProduct.getStartedAt());
         assertThat(result.getEndedAt()).isEqualTo(updateProduct.getEndedAt());
         assertThat(result.isDeleted()).isFalse();
