@@ -43,7 +43,6 @@ class ProductServiceTest {
             .password("testpassword")
             .username("username")
             .phoneNumber("010-0000-0000")
-            .createdBy("userId")
             .build();
         userMapper.save(user);
     }
@@ -106,6 +105,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("판매중, 판매대기인 상품을 조회한다.")
     void getSellingProducts() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
@@ -127,6 +127,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품 id로 상품을 조회한다.")
     void findById() {
         // given
         ProductCreateServiceRequest request = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
@@ -149,6 +150,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품을 수정한다.")
     void update() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
@@ -163,6 +165,8 @@ class ProductServiceTest {
             .startBidPrice(2000)
             .minBidPrice(2000)
             .startedAt(LocalDateTime.of(2013,12,30,05,33,35))
+            .userId(user.getId())
+            .categoryId(1L)
             .build();
         productService.update(request2);
 
@@ -183,6 +187,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("전체 상품을 조회한다.")
     void findAllProduct() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);

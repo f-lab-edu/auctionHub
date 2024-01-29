@@ -46,6 +46,14 @@ public class ProductUpdateServiceRequest {
      * 시작 시간
      */
     private LocalDateTime startedAt;
+    /**
+     * 유저 아이디
+     */
+    private Long userId;
+    /**
+     * 카테고리 아이디
+     */
+    private Long categoryId;
 
     public Product toEntity() {
         return Product.builder()
@@ -58,7 +66,8 @@ public class ProductUpdateServiceRequest {
             .minBidPrice(this.minBidPrice)
             .startedAt(this.startedAt)
             .endedAt(this.startedAt.plusDays(3))
-            .createdBy(this.name)
+            .userId(this.userId)
+            .categoryId(this.categoryId)
             .build();
     }
 }

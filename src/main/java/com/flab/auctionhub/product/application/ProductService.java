@@ -12,7 +12,6 @@ import com.flab.auctionhub.user.application.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.flab.auctionhub.user.application.response.UserCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +34,10 @@ public class ProductService {
     @Transactional
     public Long createProduct(ProductCreateServiceRequest request) {
         // 회원 여부 조회
-        UserCreateResponse userCreateResponse = userService.findById(request.getUserId());
+        userService.findById(request.getUserId());
         // 카테고리 존재 여부 조회
         categoryService.findById(request.getCategoryId());
-        Product product = request.toEntity(userCreateResponse.getUserId());
+        Product product = request.toEntity();
         productMapper.save(product);
         return product.getId();
     }
@@ -46,7 +45,6 @@ public class ProductService {
     /**
      * 상품 여러개를 등록한다
      * @param request 상품 등록에 필요한 정보
-     * @return
      */
     @Transactional
     public List<Long> createProducts(List<ProductCreateServiceRequest> request) {
@@ -54,10 +52,10 @@ public class ProductService {
 
         for (ProductCreateServiceRequest productCreateServiceRequest : request) {
             // 회원 여부 조회
-            UserCreateResponse userCreateResponse = userService.findById(productCreateServiceRequest.getUserId());
+            userService.findById(productCreateServiceRequest.getUserId());
             // 카테고리 존재 여부 조회
             categoryService.findById(productCreateServiceRequest.getCategoryId());
-            Product product = productCreateServiceRequest.toEntity(userCreateResponse.getUserId());
+            Product product = productCreateServiceRequest.toEntity();
             productList.add(product);
         }
         productMapper.saveAll(productList);
@@ -95,6 +93,11 @@ public class ProductService {
      * @param request 상품 수정에 필요한 정보
      */
     public ProductResponse update(ProductUpdateServiceRequest request) {
+        // 회원 여부 주회
+        userService.findById(request.getUserId());
+        // 카테 고리 존재 여부 조회
+        categoryService.findById(request.getCategoryId());
+
         Product product = request.toEntity();
         productMapper.update(product);
         return productMapper.findById(request.getId())

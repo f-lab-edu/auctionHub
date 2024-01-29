@@ -1,6 +1,7 @@
 package com.flab.auctionhub.product.domain;
 
 import java.time.LocalDateTime;
+import com.flab.auctionhub.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
     /**
      * 상품 번호
      */
@@ -51,26 +52,6 @@ public class Product {
      * 마감 시간
      */
     private LocalDateTime endedAt;
-    /**
-     * 삭제 여부
-     */
-    private boolean isDeleted;
-    /**
-     * 등록 일시
-     */
-    private LocalDateTime createdAt;
-    /**
-     * 등록자
-     */
-    private String createdBy;
-    /**
-     * 수정 일시
-     */
-    private LocalDateTime updatedAt;
-    /**
-     * 수정자
-     */
-    private String updatedBy;
     /**
      * 유저 아이디
      */

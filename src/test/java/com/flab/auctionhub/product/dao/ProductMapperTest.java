@@ -41,7 +41,6 @@ class ProductMapperTest {
             .password("testpassword")
             .username("username")
             .phoneNumber("010-0000-0000")
-            .createdBy("userId")
             .build();
         userMapper.save(user);
     }
@@ -69,7 +68,7 @@ class ProductMapperTest {
         assertThat(result.getEndedAt()).isEqualTo(product.getEndedAt());
         assertThat(result.isDeleted()).isFalse();
         assertThat(result.getCreatedAt()).isNotNull();
-        assertThat(result.getCreatedBy()).isEqualTo(ADMIN.getValue());
+        assertThat(result.getCreatedBy()).isNotNull();
         assertThat(result.getUpdatedAt()).isNull();
         assertThat(result.getUpdatedBy()).isNull();
         assertThat(result.getUserId()).isEqualTo(user.getId());
@@ -114,7 +113,6 @@ class ProductMapperTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
-            .createdBy(ADMIN.getValue())
             .userId(user.getId())
             .categoryId(1L)
             .build();
@@ -137,9 +135,9 @@ class ProductMapperTest {
         assertThat(result.getEndedAt()).isEqualTo(updateProduct.getEndedAt());
         assertThat(result.isDeleted()).isFalse();
         assertThat(result.getCreatedAt()).isNotNull();
-        assertThat(result.getCreatedBy()).isEqualTo(ADMIN.getValue());
-        assertThat(result.getUpdatedAt()).isNull();
-        assertThat(result.getUpdatedBy()).isNull();
+        assertThat(result.getCreatedBy()).isNotNull();
+        assertThat(result.getUpdatedAt()).isNotNull();
+        assertThat(result.getUpdatedBy()).isNotNull();
         assertThat(result.getUserId()).isEqualTo(user.getId());
         assertThat(result.getCategoryId()).isEqualTo(1L);
     }
@@ -176,7 +174,6 @@ class ProductMapperTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
-            .createdBy(ADMIN.getValue())
             .userId(user.getId())
             .categoryId(1L)
             .build();

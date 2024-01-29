@@ -57,6 +57,14 @@ public class ProductUpdateRequest {
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:MM:SS")
     private LocalDateTime startedAt;
+    /**
+     * 유저 아이디
+     */
+    private Long userId;
+    /**
+     * 카테고리 아이디
+     */
+    private Long categoryId;
 
     public ProductUpdateServiceRequest toServiceRequest() {
         return ProductUpdateServiceRequest.builder()
@@ -68,6 +76,8 @@ public class ProductUpdateRequest {
             .startBidPrice(this.startBidPrice)
             .minBidPrice(this.minBidPrice)
             .startedAt(this.startedAt)
+            .userId(this.userId)
+            .categoryId(this.categoryId)
             .build();
     }
 

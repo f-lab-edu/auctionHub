@@ -28,7 +28,6 @@ class CategoryMapperTest {
         // given
         Category category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
-            .createdBy(UserRoleType.ADMIN.getValue())
             .build();
 
         // when

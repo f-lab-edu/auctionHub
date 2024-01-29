@@ -128,7 +128,6 @@ class UserMapperTest {
             .password("testpassword")
             .username(username)
             .phoneNumber(phoneNumber)
-            .createdBy(userId)
             .build();
     }
 }

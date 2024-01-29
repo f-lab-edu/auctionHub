@@ -6,7 +6,7 @@
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO user (user_id, password, username, phone_number, created_by)
-    VALUES (#{userId}, #{password}, #{username}, #{phoneNumber}, #{createdBy})
+    VALUES (#{userId}, #{password}, #{username}, #{phoneNumber}, #{userId})
     <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
       select last_insert_id()
     </selectKey>

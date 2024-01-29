@@ -6,7 +6,7 @@
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at, ended_at, created_by, user_id, category_id)
-    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{startedAt}, #{endedAt}, #{createdBy}, #{userId}, #{categoryId})
+    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{startedAt}, #{endedAt}, #{userId}, #{userId}, #{categoryId})
     <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
       SELECT last_insert_id()
     </selectKey>
@@ -16,7 +16,7 @@
     INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at, ended_at, created_by, user_id, category_id)
     VALUES
            <foreach collection="list" index="index" item="item" separator=",">
-             (#{item.name}, #{item.description}, #{item.sellingStatus}, #{item.quickPrice}, #{item.startBidPrice}, #{item.minBidPrice}, #{item.startedAt}, #{item.endedAt}, #{item.createdBy}, #{item.userId}, #{item.categoryId})
+             (#{item.name}, #{item.description}, #{item.sellingStatus}, #{item.quickPrice}, #{item.startBidPrice}, #{item.minBidPrice}, #{item.startedAt}, #{item.endedAt}, #{item.userId}, #{item.userId}, #{item.categoryId})
            </foreach>
   </insert>
 
@@ -46,7 +46,8 @@
         min_bid_price   = #{minBidPrice},
         started_at      = #{startedAt},
         ended_at        = #{endedAt},
-        created_by      = #{createdBy}
+        updated_at      = now(),
+        updated_by      = #{userId}
     WHERE id = #{id};
   </update>
 
