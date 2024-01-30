@@ -2,7 +2,6 @@ package com.flab.auctionhub.category.application.request;
 
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
-import com.flab.auctionhub.user.domain.UserRoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +21,6 @@ public class CategoryServiceRequest {
     public Category toEntity() {
         return Category.builder()
             .name(this.name)
-            .createdBy(UserRoleType.ADMIN.getValue())
             .build();
     }
 }
