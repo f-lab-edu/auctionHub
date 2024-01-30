@@ -8,6 +8,9 @@ on:
 env:
   CACHED_DEPENDENCIES_PATHS: '**/node_modules'
 
+sonar:
+  exclusions: '**/*Request'
+
 jobs:
   CodeAnalyze:
     runs-on: ubuntu-latest
@@ -59,4 +62,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SECRET_SONARQUBE }}
 
-          
