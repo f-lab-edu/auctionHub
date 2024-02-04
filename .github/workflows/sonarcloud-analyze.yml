@@ -3,13 +3,13 @@ name: F-Lab SonarCloud Code Analyze
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      exclude:
+        - '**/*Request'
   workflow_dispatch:
 
 env:
   CACHED_DEPENDENCIES_PATHS: '**/node_modules'
-
-sonar:
-  exclusions: '**/*Request'
 
 jobs:
   CodeAnalyze:
