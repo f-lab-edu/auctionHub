@@ -25,7 +25,11 @@
 
 Jenkins CI 구성하기
 
-- [https://www.notion.so/CI-CD-CI-32d1c7b33c814d8ebb42bf27c552e6aa](https://www.notion.so/CI-CD-CI-32d1c7b33c814d8ebb42bf27c552e6aa?pvs=21)
+- https://systemdata.tistory.com/81
+
+Validation 책임과 범위는 어떻게 가져가야할까?
+
+- https://systemdata.tistory.com/82
 
 프로젝트 기술 스택 선정
 
