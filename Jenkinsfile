@@ -21,7 +21,7 @@ pipeline {
         // Test
         stage('Test') {
             steps {
-//                 sh 'gradle test'
+//                 sh './gradlew test'
                 echo 'Test Success!'
             }
         }
