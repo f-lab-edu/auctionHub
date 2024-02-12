@@ -23,9 +23,13 @@
 
 ### 기술적 issue해결과정
 
-Jenkins CI 구성하기
+젠킨스를 통한 CI/CD 구성하기 - CI
 
 - https://systemdata.tistory.com/81
+
+젠킨스를 통한 CI/CD 구성하기 - CD
+
+- https://systemdata.tistory.com/83
 
 Validation 책임과 범위는 어떻게 가져가야할까?
 
