@@ -2,16 +2,20 @@
 
 시작가 천원!  누구나 참여할 수 있는 경매 어플리케이션.
 
+### auctionHub 서버 구조도
+
+<img width="850" alt="image" src="https://github.com/f-lab-edu/auctionHub/assets/59176149/e9109f28-0923-4423-8e2e-35ba9ecd1815">
+
 ### 사용기술 및 개발환경
 
-- Spring Boot
+- Spring Boot 3.1.2
 - Java 17
 - MySQL
 - Mybatis
 - Gradle
 - Jenkins
 - naver cloud platform
-- IntelliJ
+- Junit5
 
 ### 프로젝트 주요 관심사
 
@@ -23,25 +27,27 @@
 
 ### 기술적 issue해결과정
 
-젠킨스를 통한 CI/CD 구성하기 - CI
+- 젠킨스를 통한 CI/CD 구성하기 - CI 구축 과정
+  
+    https://systemdata.tistory.com/81
 
-- https://systemdata.tistory.com/81
+- 젠킨스를 통한 CI/CD 구성하기 - CD 구축 과정
 
-젠킨스를 통한 CI/CD 구성하기 - CD
+    https://systemdata.tistory.com/83
 
-- https://systemdata.tistory.com/83
+- Validation 책임과 범위는 어떻게 가져가야할까?
 
-Validation 책임과 범위는 어떻게 가져가야할까?
+    https://systemdata.tistory.com/82
 
-- https://systemdata.tistory.com/82
+- 테이블마다 id 칼럼을 PK로 사용한 이유는 무엇일까?
 
-테이블마다 id 칼럼을 PK로 사용한 이유는 무엇일까?
-
-- https://systemdata.tistory.com/84
+    https://systemdata.tistory.com/84
 
 프로젝트 기술 스택 선정
 
-- Gradle vs Maven (https://github.com/Jammini/TIL/blob/master/spring/mavenvsgradle.md)
+- Gradle vs Maven 
+  
+  https://github.com/Jammini/TIL/blob/master/spring/mavenvsgradle.md
 
 ### WIKI
 
