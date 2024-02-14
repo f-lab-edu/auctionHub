@@ -35,6 +35,10 @@ Validation 책임과 범위는 어떻게 가져가야할까?
 
 - https://systemdata.tistory.com/82
 
+테이블마다 id 칼럼을 PK로 사용한 이유는 무엇일까?
+
+- https://systemdata.tistory.com/84
+
 프로젝트 기술 스택 선정
 
 - Gradle vs Maven (https://github.com/Jammini/TIL/blob/master/spring/mavenvsgradle.md)
