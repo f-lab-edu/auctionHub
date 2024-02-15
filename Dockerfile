@@ -1,7 +1,7 @@
 # openjdk 17 이미지를 상속
 FROM openjdk:17
 
-# JAR 파일 위치
+# jar 파일 위치
 ARG JAR_FILE_PATH=build/libs/*.jar
 
 # jar파일을 app.jar로 복사
