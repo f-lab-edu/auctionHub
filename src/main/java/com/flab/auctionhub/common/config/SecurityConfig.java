@@ -1,4 +1,4 @@
-package com.flab.auctionhub;
+package com.flab.auctionhub.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
