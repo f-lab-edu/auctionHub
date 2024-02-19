@@ -3,7 +3,7 @@ POST localhost:8080/category
 Content-Type: application/json
 
 {
-  "name": "남성의류"
+  "name": "MENSCLOTHING"
 }
 
 ### 카테고리 전체 조회

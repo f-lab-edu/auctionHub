@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.auctionhub.bid.dao.BidMapper">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO bid (price, created_by, user_id, product_id)
+    VALUES (#{price}, #{userId}, #{userId}, #{productId})
+    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
+      SELECT last_insert_id()
+    </selectKey>
+  </insert>
+
+  <select id="selectHighestBidPriceForProduct" parameterType="Long" resultType="int">
+    SELECT price
+    FROM bid
+    WHERE product_id = #{productId}
+    ORDER BY price DESC
+    LIMIT 1;
+  </select>
+
+  <select id="findByProductId" parameterType="Long" resultType="com.flab.auctionhub.bid.domain.Bid">
+    SELECT price, user_id, product_id
+    FROM bid
+    WHERE product_id = #{productId}
+    ORDER BY price DESC;
+  </select>
+
+</mapper>
