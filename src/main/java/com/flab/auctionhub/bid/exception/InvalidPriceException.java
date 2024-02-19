@@ -1,0 +1,8 @@
+package com.flab.auctionhub.bid.exception;
+
+public class InvalidPriceException extends RuntimeException {
+
+    public InvalidPriceException(String message) {
+        super(message);
+    }
+}

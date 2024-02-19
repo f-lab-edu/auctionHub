@@ -1,0 +1,12 @@
+### 입찰내역을 생성한다.
+POST localhost:8080/bids
+Content-Type: application/json
+
+{
+  "price": "3000",
+  "userId": "1",
+  "productId": "1"
+}
+
+### 상품에 대한 입찰내역을 조회한다.
+GET localhost:8080/bids/1
