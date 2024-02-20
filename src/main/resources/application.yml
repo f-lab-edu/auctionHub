@@ -68,7 +68,7 @@ spring:
   sql:
     init:
       schema-locations: classpath*:schema.sql
-      data-locations: classpath*:data-test.sql
+      data-locations: ""
       mode: always
 
 ---

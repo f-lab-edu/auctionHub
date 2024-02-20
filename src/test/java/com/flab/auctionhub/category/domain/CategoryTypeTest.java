@@ -22,9 +22,19 @@ class CategoryTypeTest {
     @DisplayName("지정된 카테고리 타입 값이 들어오면 ENUM 타입을 반환해준다.")
     void getCategoryName2() {
         // when
-        CategoryType categoryName = CategoryType.getCategoryName("남성의류");
+        CategoryType mensClothing = CategoryType.MENSCLOTHING;
+        CategoryType womensClothing = CategoryType.WOMENSCLOTHING;
+        CategoryType bag = CategoryType.BAG;
+        CategoryType shoes = CategoryType.SHOES;
+        CategoryType household = CategoryType.HOUSEHOLD;
+        CategoryType health = CategoryType.HEALTH;
 
         // then
-        assertThat(categoryName).isEqualTo(CategoryType.MENSCLOTHING);
+        assertThat(mensClothing).isEqualTo(CategoryType.getCategoryName("남성의류"));
+        assertThat(womensClothing).isEqualTo(CategoryType.getCategoryName("여성의류"));
+        assertThat(bag).isEqualTo(CategoryType.getCategoryName("가방"));
+        assertThat(shoes).isEqualTo(CategoryType.getCategoryName("신발"));
+        assertThat(household).isEqualTo(CategoryType.getCategoryName("생활용품"));
+        assertThat(health).isEqualTo(CategoryType.getCategoryName("건강"));
     }
 }

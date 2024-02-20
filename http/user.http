@@ -1,0 +1,32 @@
+### 회원을 등록한다.
+POST localhost:8080/users
+Content-Type: application/json
+
+{
+  "userId":"testId",
+  "password":"testPassword",
+  "username":"테스트",
+  "phoneNumber":"010-1234-1234"
+}
+
+### 회원 중복 체크를 한다.
+GET localhost:8080/users/check-duplication?userId=1
+
+
+### 회원 전체를 조회한다.
+GET localhost:8080/users
+
+### 회원의 상세 정보를 조회한다.
+GET localhost:8080/users/1
+
+### 로그인을 한다.
+POST localhost:8080/login
+Content-Type: application/json
+
+{
+"userId":"testId",
+"password":"testPassword"
+}
+
+### 로그아웃을 한다.
+GET localhost:8080/logout

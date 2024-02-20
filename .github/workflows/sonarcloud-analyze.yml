@@ -3,9 +3,6 @@ name: F-Lab SonarCloud Code Analyze
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      exclude:
-        - '**/*Request'
   workflow_dispatch:
 
 env:

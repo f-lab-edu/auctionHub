@@ -1,6 +1,9 @@
 package com.flab.auctionhub.bid.dao;
 
 import com.flab.auctionhub.bid.domain.Bid;
+import com.flab.auctionhub.category.dao.CategoryMapper;
+import com.flab.auctionhub.category.domain.Category;
+import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.product.dao.ProductMapper;
 import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
@@ -35,9 +38,14 @@ class BidMapperTest {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     User user;
 
     Product product;
+
+    Category category;
 
     @BeforeEach
     void BeforeEach() {
@@ -49,6 +57,11 @@ class BidMapperTest {
             .build();
         userMapper.save(user);
 
+        category = Category.builder()
+            .name(CategoryType.MENSCLOTHING)
+            .build();
+        categoryMapper.save(category);
+
         product = Product.builder()
             .name("나이키 슈즈")
             .description("사이즈는 280입니다.")
@@ -59,7 +72,7 @@ class BidMapperTest {
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .userId(user.getId())
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
         productMapper.save(product);
     }

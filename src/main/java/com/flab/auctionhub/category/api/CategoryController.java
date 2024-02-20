@@ -19,16 +19,23 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    /**
+     * 카테고리를 등록한다.
+     * @param request 카테고리 등록에 필요한 정보
+     */
     @PostMapping("/category")
     public ResponseEntity<Long> createCategory(@RequestBody @Validated CategoryRequest request) {
         Long id = categoryService.createCategory(request.toServiceRequest());
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
+    /**
+     * 카테고리 전체를 조회한다.
+     */
     @GetMapping("/category")
     public ResponseEntity<List<CategoryResponse>> findAllCategory() {
         List<CategoryResponse> categoryList = categoryService.findAllCategory();
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 
 }
