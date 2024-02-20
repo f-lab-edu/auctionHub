@@ -24,6 +24,10 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 회원을 등록한다.
+     * @param request 회원 등록에 필요한 정보
+     */
     @PostMapping("/users")
     // HTTP POST 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.POST)과 같은 역할을 한다.
     public ResponseEntity<Long> createUser(@RequestBody @Validated UserCreateRequest request) {
@@ -32,6 +36,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
+    /**
+     * 회원 중복 체크를 한다.
+     * @param userId 회원 유저 아이디
+     */
     @GetMapping("/users/check-duplication")
     // HTTP GET 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.GET)과 같은 역할을 한다.
     public ResponseEntity<Boolean> checkUserIdDuplication(@RequestParam String userId) {
@@ -39,18 +47,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(Boolean.FALSE);
     }
 
+    /**
+     * 회원 전체를 조회한다.
+     */
     @GetMapping("/users")
     public ResponseEntity<List<UserCreateResponse>> findAllUser() {
         List<UserCreateResponse> userList = userService.findAllUser();
         return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
+    /**
+     * 회원의 상세 정보를 조회한다.
+     * @param id 아이디
+     */
     @GetMapping("/users/{id}")
     public ResponseEntity<UserCreateResponse> findById(@PathVariable Long id) {
         UserCreateResponse user = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    /**
+     * 로그인을 한다.
+     */
     @PostMapping(path = "/login")
     public ResponseEntity<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest request,
         HttpSession session) {
@@ -58,6 +76,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
     }
 
+    /**
+     * 로그아웃을 한다.
+     */
     @GetMapping("/logout")
     public ResponseEntity<Void> logoutUser(HttpSession httpSession) {
         httpSession.invalidate();

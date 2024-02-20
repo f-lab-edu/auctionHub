@@ -9,7 +9,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 import org.apache.ibatis.type.TypeHandler;
 
-@MappedTypes(UserRoleType.class)
+@MappedTypes(UserRoleType.class) // MyBatis에서 사용되는 어노테이션으로, 자바 타입과 MyBatis의 타입 핸들러를 매핑할 때 사용된다.
 public class UserRoleTypeHandler implements TypeHandler<UserRoleType> {
 
     @Override
