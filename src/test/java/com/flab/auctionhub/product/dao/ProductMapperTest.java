@@ -7,6 +7,9 @@ import static com.flab.auctionhub.user.domain.UserRoleType.ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.flab.auctionhub.category.dao.CategoryMapper;
+import com.flab.auctionhub.category.domain.Category;
+import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import java.time.LocalDateTime;
@@ -32,7 +35,12 @@ class ProductMapperTest {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    CategoryMapper categoryMapper;
+
     User user;
+
+    Category category;
 
     @BeforeEach
     void BeforeEach() {
@@ -43,6 +51,8 @@ class ProductMapperTest {
             .phoneNumber("010-0000-0000")
             .build();
         userMapper.save(user);
+        category = getCategory(CategoryType.MENSCLOTHING);
+        categoryMapper.save(category);
     }
 
     @Test
@@ -72,7 +82,7 @@ class ProductMapperTest {
         assertThat(result.getUpdatedAt()).isNull();
         assertThat(result.getUpdatedBy()).isNull();
         assertThat(result.getUserId()).isEqualTo(user.getId());
-        assertThat(result.getCategoryId()).isEqualTo(1L);
+        assertThat(result.getCategoryId()).isEqualTo(category.getId());
     }
 
     @Test
@@ -114,7 +124,7 @@ class ProductMapperTest {
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .userId(user.getId())
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
 
         // when
@@ -139,7 +149,7 @@ class ProductMapperTest {
         assertThat(result.getUpdatedAt()).isNotNull();
         assertThat(result.getUpdatedBy()).isNotNull();
         assertThat(result.getUserId()).isEqualTo(user.getId());
-        assertThat(result.getCategoryId()).isEqualTo(1L);
+        assertThat(result.getCategoryId()).isEqualTo(category.getId());
     }
 
     @Test
@@ -175,7 +185,14 @@ class ProductMapperTest {
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .userId(user.getId())
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
+    }
+
+    private Category getCategory(CategoryType type) {
+        Category category = Category.builder()
+            .name(type)
+            .build();
+        return category;
     }
 }

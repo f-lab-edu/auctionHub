@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.tuple;
 
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
+import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.domain.UserRoleType;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,17 @@ class CategoryMapperTest {
 
     @Autowired
     CategoryMapper categoryMapper;
+
+    @BeforeEach
+    void BeforeEach() {
+        categoryMapper.save(getCategory(CategoryType.MENSCLOTHING));
+        categoryMapper.save(getCategory(CategoryType.WOMENSCLOTHING));
+        categoryMapper.save(getCategory(CategoryType.BAG));
+        categoryMapper.save(getCategory(CategoryType.SHOES));
+        categoryMapper.save(getCategory(CategoryType.HOUSEHOLD));
+        categoryMapper.save(getCategory(CategoryType.HEALTH));
+    }
+
 
     @Test
     @DisplayName("카테고리를 생성한다.")
@@ -56,4 +69,11 @@ class CategoryMapperTest {
                 tuple(CategoryType.getCategoryName("건강"), false, "A")
             );
     }
+    private Category getCategory(CategoryType type) {
+        Category category = Category.builder()
+            .name(type)
+            .build();
+        return category;
+    }
+
 }

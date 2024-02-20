@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.flab.auctionhub.category.dao.CategoryMapper;
+import com.flab.auctionhub.category.domain.Category;
+import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
 import com.flab.auctionhub.product.application.request.ProductCreateServiceRequest;
 import com.flab.auctionhub.product.application.request.ProductUpdateServiceRequest;
@@ -33,8 +36,12 @@ class ProductServiceTest {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     User user;
+
+    Category category;
 
     @BeforeEach
     void BeforeEach() {
@@ -45,6 +52,9 @@ class ProductServiceTest {
             .phoneNumber("010-0000-0000")
             .build();
         userMapper.save(user);
+
+        category = getCategory(CategoryType.MENSCLOTHING);
+        categoryMapper.save(category);
     }
 
     @Test
@@ -73,7 +83,7 @@ class ProductServiceTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2013,12,18,05,33,35))
             .userId(9999L)
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
 
         // when // then
@@ -166,7 +176,7 @@ class ProductServiceTest {
             .minBidPrice(2000)
             .startedAt(LocalDateTime.of(2013,12,30,05,33,35))
             .userId(user.getId())
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
         productService.update(request2);
 
@@ -218,9 +228,15 @@ class ProductServiceTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2013,12,18,05,33,35))
             .userId(user.getId())
-            .categoryId(1L)
+            .categoryId(category.getId())
             .build();
         return request;
     }
 
+    private Category getCategory(CategoryType type) {
+        Category category = Category.builder()
+            .name(type)
+            .build();
+        return category;
+    }
 }
