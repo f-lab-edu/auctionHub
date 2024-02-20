@@ -6,5 +6,5 @@ Content-Type: application/json
   "name": "MENSCLOTHING"
 }
 
-### 카테고리 전체 조회
+### 카테고리 전체를 조회한다.
 GET localhost:8080/category
