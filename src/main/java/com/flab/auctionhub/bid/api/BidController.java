@@ -27,7 +27,7 @@ public class BidController {
     @PostMapping("/bids")
     public ResponseEntity<Long> createBid(@RequestBody @Validated BidCreateRequest request) {
         Long id = bidService.createBid(request.toServiceRequest());
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     /**
@@ -37,6 +37,6 @@ public class BidController {
     @GetMapping("/bids/{productId}")
     public ResponseEntity<List<BidResponse>> getBidListForProduct(@PathVariable Long productId) {
         List<BidResponse> bidList = bidService.getBidListForProduct(productId);
-        return new ResponseEntity<>(bidList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(bidList);
     }
 }

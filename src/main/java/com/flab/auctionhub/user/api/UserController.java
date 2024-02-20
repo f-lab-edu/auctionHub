@@ -29,38 +29,38 @@ public class UserController {
     public ResponseEntity<Long> createUser(@RequestBody @Validated UserCreateRequest request) {
         // @RequestBody : 요청의 body 데이터를 객체로 변환해주는 어노테이션, @Validated : 유효성 검증을 적용하기 위해 사용된 어노테이션
         Long id = userService.createUser(request.toServiceRequest());
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     @GetMapping("/users/check-duplication")
     // HTTP GET 요청을 매핑하는 어노테이션이며 @RequestMapping(method = RequestMethod.GET)과 같은 역할을 한다.
     public ResponseEntity<Boolean> checkUserIdDuplication(@RequestParam String userId) {
         userService.checkUserIdDuplication(userId);
-        return new ResponseEntity<>(Boolean.FALSE, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Boolean.FALSE);
     }
 
     @GetMapping("/users")
     public ResponseEntity<List<UserCreateResponse>> findAllUser() {
         List<UserCreateResponse> userList = userService.findAllUser();
-        return new ResponseEntity<>(userList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserCreateResponse> findById(@PathVariable Long id) {
         UserCreateResponse user = userService.findById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PostMapping(path = "/login")
     public ResponseEntity<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest request,
         HttpSession session) {
         UserLoginResponse userLoginResponse = userService.login(request.toServiceRequest(), session);
-        return new ResponseEntity<>(userLoginResponse, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
     }
 
     @GetMapping("/logout")
     public ResponseEntity<Void> logoutUser(HttpSession httpSession) {
         httpSession.invalidate();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -22,13 +22,13 @@ public class CategoryController {
     @PostMapping("/category")
     public ResponseEntity<Long> createCategory(@RequestBody @Validated CategoryRequest request) {
         Long id = categoryService.createCategory(request.toServiceRequest());
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     @GetMapping("/category")
     public ResponseEntity<List<CategoryResponse>> findAllCategory() {
         List<CategoryResponse> categoryList = categoryService.findAllCategory();
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 
 }

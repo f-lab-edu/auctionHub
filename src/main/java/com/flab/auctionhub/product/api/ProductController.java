@@ -1,5 +1,6 @@
 package com.flab.auctionhub.product.api;
 
+import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
 import com.flab.auctionhub.product.api.request.ProductsCreateRequest;
 import com.flab.auctionhub.product.application.ProductService;
@@ -31,10 +32,10 @@ public class ProductController {
     public ResponseEntity<List<Long>> createProducts(@RequestBody @Validated ProductsCreateRequest request) {
         List<Long> productListId = productService.createProducts(
             request.getProductCreateRequestList().stream()
-                .map(productCreateRequest -> productCreateRequest.toServiceRequest())
+                .map(ProductCreateRequest::toServiceRequest)
                 .collect(Collectors.toList())
         );
-        return new ResponseEntity<>(productListId, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productListId);
     }
 
     /**
@@ -43,7 +44,7 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<List<ProductResponse>> findAllProduct() {
         List<ProductResponse> productList = productService.findAllProduct();
-        return new ResponseEntity<>(productList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
     /**
@@ -53,7 +54,7 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
         ProductResponse product = productService.findById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     /**
@@ -63,7 +64,7 @@ public class ProductController {
     @PutMapping("/products")
     public ResponseEntity<ProductResponse> update(@RequestBody @Validated ProductUpdateRequest request) {
         ProductResponse product = productService.update(request.toServiceRequest());
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     /**
@@ -72,7 +73,7 @@ public class ProductController {
     @GetMapping("/products/selling")
     public ResponseEntity<List<ProductResponse>> getSellingProducts() {
         List<ProductResponse> productList = productService.getSellingProducts();
-        return new ResponseEntity<>(productList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
 }
