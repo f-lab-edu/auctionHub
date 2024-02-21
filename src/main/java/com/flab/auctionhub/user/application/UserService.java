@@ -1,5 +1,6 @@
 package com.flab.auctionhub.user.application;
 
+import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.user.application.request.UserCreateServiceRequest;
 import com.flab.auctionhub.user.application.request.UserLoginServiceRequest;
 import com.flab.auctionhub.user.application.response.UserCreateResponse;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private static final String USER_ID = "USER_ID";
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
@@ -79,7 +79,8 @@ public class UserService {
             throw new InvalidSigningInformationException("비밀번호가 올바르지 않습니다.");
         }
 
-        session.setAttribute(USER_ID, user.getUserId());
+        SessionUtil.setLoginUserId(session, user.getUserId());
+        SessionUtil.setLoginUserRole(session, user.getRoleType());
         return UserLoginResponse.of(user);
     }
 

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.product.api.request.ProductCreateRequest;
 import com.flab.auctionhub.product.api.request.ProductUpdateRequest;
 import com.flab.auctionhub.product.api.request.ProductsCreateRequest;
@@ -19,12 +20,14 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductController.class)
@@ -48,9 +51,14 @@ class ProductControllerTest {
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
             post("/products")
+                .session(session)
                 .content(objectMapper.writeValueAsString(productsCreateRequest))
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -71,9 +79,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Arrays.asList(request1, request2, request3, request4);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -100,9 +114,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -128,9 +148,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -157,9 +183,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -186,9 +218,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -215,9 +253,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -243,9 +287,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -271,9 +321,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -299,9 +355,15 @@ class ProductControllerTest {
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
 
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 post("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(productsCreateRequest))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -316,11 +378,16 @@ class ProductControllerTest {
         // given
         List<ProductResponse> result = List.of();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         when(productService.findAllProduct()).thenReturn(result);
 
         // when // then
         mockMvc.perform(
             get("/products")
+                .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
         )
         .andDo(print())
@@ -348,9 +415,14 @@ class ProductControllerTest {
             .build();
         when(productService.findById(id)).thenReturn(productResponse);
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
             get("/products/{id}", id)
+                .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
         )
         .andDo(print())
@@ -373,9 +445,14 @@ class ProductControllerTest {
             .startedAt(LocalDateTime.of(2013,12,18,05,33,35))
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+
         // when // then
         mockMvc.perform(
                 put("/products")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -391,9 +468,14 @@ class ProductControllerTest {
 
         when(productService.getSellingProducts()).thenReturn(result);
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
             get("/products/selling")
+                .session(session)
         )
         .andDo(print())
         .andExpect(status().isOk())
