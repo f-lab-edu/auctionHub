@@ -3,12 +3,15 @@ package com.flab.auctionhub.bid.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.auctionhub.bid.api.request.BidCreateRequest;
 import com.flab.auctionhub.bid.application.BidService;
+import com.flab.auctionhub.common.util.SessionUtil;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,9 +39,14 @@ class BidControllerTest {
         // given
         BidCreateRequest bid = createBidInfo(3000);
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
             post("/bids")
+                .session(session)
                 .content(objectMapper.writeValueAsString(bid))
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -56,9 +64,14 @@ class BidControllerTest {
             .productId(1L)
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
                 post("/bids")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(bid))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -76,9 +89,14 @@ class BidControllerTest {
             .productId(1L)
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
                 post("/bids")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(bid))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -96,9 +114,14 @@ class BidControllerTest {
             .userId(1L)
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
                 post("/bids")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(bid))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -113,9 +136,14 @@ class BidControllerTest {
         // given
         BidCreateRequest bid = createBidInfo(2000);
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         // when // then
         mockMvc.perform(
                 get("/bids/{productId}", bid.getProductId())
+                    .session(session)
                     .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())

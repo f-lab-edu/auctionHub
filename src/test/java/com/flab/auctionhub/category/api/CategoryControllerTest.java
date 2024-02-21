@@ -12,12 +12,15 @@ import com.flab.auctionhub.category.application.CategoryService;
 import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.category.api.request.CategoryRequest;
 import com.flab.auctionhub.category.application.response.CategoryResponse;
+import com.flab.auctionhub.common.util.SessionUtil;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
@@ -41,9 +44,15 @@ class CategoryControllerTest {
             .name(CategoryType.BAG)
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.ADMIN);
+
+
         // when // then
         mockMvc.perform(
                 post("/category")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -58,9 +67,14 @@ class CategoryControllerTest {
         CategoryRequest request = CategoryRequest.builder()
             .build();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.ADMIN);
+
         // when // then
         mockMvc.perform(
                 post("/category")
+                    .session(session)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -76,11 +90,16 @@ class CategoryControllerTest {
         // given
         List<CategoryResponse> result = List.of();
 
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+
         when(categoryService.findAllCategory()).thenReturn(result);
 
         // when // then
         mockMvc.perform(
                 get("/category")
+                    .session(session)
             )
             .andDo(print())
             .andExpect(status().isOk())

@@ -124,11 +124,11 @@ class BidMapperTest {
 
         // then
         assertThat(bidList).hasSize(3)
-            .extracting("price","userId","productId")
+            .extracting("price", "createdAt", "createdBy", "userId","productId")
             .containsExactlyInAnyOrder(
-                tuple(bid1.getPrice(), bid1.getUserId(), bid1.getProductId()),
-                tuple(bid2.getPrice(), bid2.getUserId(), bid2.getProductId()),
-                tuple(bid3.getPrice(), bid3.getUserId(), bid3.getProductId())
+                tuple(bid1.getPrice(), bid1.getCreatedAt(), bid1.getCreatedBy(), bid1.getUserId(), bid1.getProductId()),
+                tuple(bid2.getPrice(), bid2.getCreatedAt(), bid2.getCreatedBy(), bid2.getUserId(), bid2.getProductId()),
+                tuple(bid3.getPrice(), bid3.getCreatedAt(), bid3.getCreatedBy(), bid3.getUserId(), bid3.getProductId())
             );
     }
 
