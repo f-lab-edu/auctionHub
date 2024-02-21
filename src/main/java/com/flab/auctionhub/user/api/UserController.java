@@ -1,5 +1,6 @@
 package com.flab.auctionhub.user.api;
 
+import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.api.request.UserCreateRequest;
 import com.flab.auctionhub.user.api.request.UserLoginRequest;
@@ -80,8 +81,8 @@ public class UserController {
      * 로그아웃을 한다.
      */
     @GetMapping("/logout")
-    public ResponseEntity<Void> logoutUser(HttpSession httpSession) {
-        httpSession.invalidate();
+    public ResponseEntity<Void> logoutUser(HttpSession session) {
+        SessionUtil.clear(session);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

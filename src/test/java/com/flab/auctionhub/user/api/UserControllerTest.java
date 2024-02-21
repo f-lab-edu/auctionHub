@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.domain.UserRoleType;
 import com.flab.auctionhub.user.api.request.UserCreateRequest;
@@ -253,11 +254,17 @@ class UserControllerTest {
         UserCreateResponse userCreateResponse = new UserCreateResponse(
             userCreateRequest.getUserId(), userCreateRequest.getUsername(), UserRoleType.MEMBER,
             userCreateRequest.getPhoneNumber());
+
+        MockHttpSession session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, userCreateResponse.getUserId());
+        SessionUtil.setLoginUserRole(session, userCreateResponse.getRoleType());
+
         when(userService.findById(id)).thenReturn(userCreateResponse);
 
         // when // then
         mockMvc.perform(
                 get("/users/" + id)
+                    .session(session)
                     .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
