@@ -18,9 +18,10 @@ public class CategoryServiceRequest {
      */
     private CategoryType name;
 
-    public Category toEntity() {
+    public Category toEntity(String currentAuditor) {
         return Category.builder()
             .name(this.name)
+            .createdBy(currentAuditor)
             .build();
     }
 }

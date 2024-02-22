@@ -1,6 +1,7 @@
 package com.flab.auctionhub.product.application;
 
 import com.flab.auctionhub.category.application.CategoryService;
+import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.request.ProductCreateServiceRequest;
 import com.flab.auctionhub.product.application.request.ProductUpdateServiceRequest;
 import com.flab.auctionhub.product.application.response.ProductResponse;
@@ -27,6 +28,8 @@ public class ProductService {
 
     private final CategoryService categoryService;
 
+    private final LoginUserAuditorAware loginUserAuditorAware;
+
     /**
      * 상품을 등록한다
      * @param request 상품 등록에 필요한 정보
@@ -37,7 +40,8 @@ public class ProductService {
         userService.findById(request.getUserId());
         // 카테고리 존재 여부 조회
         categoryService.findById(request.getCategoryId());
-        Product product = request.toEntity();
+        String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
+        Product product = request.toEntity(currentAuditor);
         productMapper.save(product);
         return product.getId();
     }
@@ -55,7 +59,8 @@ public class ProductService {
             userService.findById(productCreateServiceRequest.getUserId());
             // 카테고리 존재 여부 조회
             categoryService.findById(productCreateServiceRequest.getCategoryId());
-            Product product = productCreateServiceRequest.toEntity();
+            String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
+            Product product = productCreateServiceRequest.toEntity(currentAuditor);
             productList.add(product);
         }
         productMapper.saveAll(productList);
@@ -97,8 +102,8 @@ public class ProductService {
         userService.findById(request.getUserId());
         // 카테 고리 존재 여부 조회
         categoryService.findById(request.getCategoryId());
-
-        Product product = request.toEntity();
+        String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
+        Product product = request.toEntity(currentAuditor);
         productMapper.update(product);
         return productMapper.findById(request.getId())
             .map(ProductResponse::of)

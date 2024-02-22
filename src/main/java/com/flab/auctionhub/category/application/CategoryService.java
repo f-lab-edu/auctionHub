@@ -7,6 +7,7 @@ import com.flab.auctionhub.category.application.response.CategoryResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
+import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +19,15 @@ public class CategoryService {
 
     private final CategoryMapper categoryMapper;
 
+    private final LoginUserAuditorAware loginUserAuditorAware;
     /**
      * 카테고리를 등록한다.
      * @param request 카테고리 등록에 필요한 정보
      */
     @Transactional
     public Long createCategory(CategoryServiceRequest request) {
-        Category category = request.toEntity();
+        String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
+        Category category = request.toEntity(currentAuditor);
         categoryMapper.save(category);
         return category.getId();
     }

@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.tuple;
 
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
-import com.flab.auctionhub.user.domain.User;
-import com.flab.auctionhub.user.domain.UserRoleType;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,12 +24,12 @@ class CategoryMapperTest {
 
     @BeforeEach
     void BeforeEach() {
-        categoryMapper.save(getCategory(CategoryType.MENSCLOTHING));
-        categoryMapper.save(getCategory(CategoryType.WOMENSCLOTHING));
-        categoryMapper.save(getCategory(CategoryType.BAG));
-        categoryMapper.save(getCategory(CategoryType.SHOES));
-        categoryMapper.save(getCategory(CategoryType.HOUSEHOLD));
-        categoryMapper.save(getCategory(CategoryType.HEALTH));
+        categoryMapper.save(getCategory(CategoryType.MENSCLOTHING, "admin1"));
+        categoryMapper.save(getCategory(CategoryType.WOMENSCLOTHING, "admin2"));
+        categoryMapper.save(getCategory(CategoryType.BAG, "admin3"));
+        categoryMapper.save(getCategory(CategoryType.SHOES, "admin4"));
+        categoryMapper.save(getCategory(CategoryType.HOUSEHOLD, "admin5"));
+        categoryMapper.save(getCategory(CategoryType.HEALTH, "admin6"));
     }
 
 
@@ -41,6 +39,7 @@ class CategoryMapperTest {
         // given
         Category category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
+            .createdBy("admin")
             .build();
 
         // when
@@ -61,17 +60,18 @@ class CategoryMapperTest {
         assertThat(categoryList).hasSize(6)
             .extracting("name", "isDeleted", "createdBy")
             .containsExactlyInAnyOrder(
-                tuple(CategoryType.getCategoryName("남성의류"), false, "A"),
-                tuple(CategoryType.getCategoryName("여성의류"), false, "A"),
-                tuple(CategoryType.getCategoryName("가방"), false, "A"),
-                tuple(CategoryType.getCategoryName("신발"), false, "A"),
-                tuple(CategoryType.getCategoryName("생활용품"), false, "A"),
-                tuple(CategoryType.getCategoryName("건강"), false, "A")
+                tuple(CategoryType.getCategoryName("남성의류"), false, "admin1"),
+                tuple(CategoryType.getCategoryName("여성의류"), false, "admin2"),
+                tuple(CategoryType.getCategoryName("가방"), false, "admin3"),
+                tuple(CategoryType.getCategoryName("신발"), false, "admin4"),
+                tuple(CategoryType.getCategoryName("생활용품"), false, "admin5"),
+                tuple(CategoryType.getCategoryName("건강"), false, "admin6")
             );
     }
-    private Category getCategory(CategoryType type) {
+    private Category getCategory(CategoryType type, String loginUser) {
         Category category = Category.builder()
             .name(type)
+            .createdBy(loginUser)
             .build();
         return category;
     }

@@ -19,12 +19,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
 
-        log.debug("동작하냐?");
-
         if (session == null || SessionUtil.getLoginUserId(session) == null) {
             throw new UnauthenticatedException("미인증된 사용자 입니다.");
         }
-        log.debug("SessionUtil.getLoginUserRole(session) =  {}", SessionUtil.getLoginUserRole(session));
 
         if (SessionUtil.getLoginUserRole(session) == null) {
             throw new PermissionDeniedException("사용자 권한이 없습니다.");

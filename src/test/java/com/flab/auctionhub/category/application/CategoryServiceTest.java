@@ -2,19 +2,23 @@ package com.flab.auctionhub.category.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
+import com.flab.auctionhub.category.api.request.CategoryRequest;
+import com.flab.auctionhub.category.application.response.CategoryResponse;
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
-import com.flab.auctionhub.category.api.request.CategoryRequest;
-import com.flab.auctionhub.category.application.response.CategoryResponse;
-import java.util.List;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
+import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,14 +33,17 @@ class CategoryServiceTest {
     @Autowired
     CategoryMapper categoryMapper;
 
+    @MockBean
+    private LoginUserAuditorAware loginUserAuditorAware;
+
     @BeforeEach
     void BeforeEach() {
-        categoryMapper.save(getCategory(CategoryType.MENSCLOTHING));
-        categoryMapper.save(getCategory(CategoryType.WOMENSCLOTHING));
-        categoryMapper.save(getCategory(CategoryType.BAG));
-        categoryMapper.save(getCategory(CategoryType.SHOES));
-        categoryMapper.save(getCategory(CategoryType.HOUSEHOLD));
-        categoryMapper.save(getCategory(CategoryType.HEALTH));
+        categoryMapper.save(getCategory(CategoryType.MENSCLOTHING, "admin1"));
+        categoryMapper.save(getCategory(CategoryType.WOMENSCLOTHING, "admin2"));
+        categoryMapper.save(getCategory(CategoryType.BAG, "admin3"));
+        categoryMapper.save(getCategory(CategoryType.SHOES, "admin4"));
+        categoryMapper.save(getCategory(CategoryType.HOUSEHOLD, "admin5"));
+        categoryMapper.save(getCategory(CategoryType.HEALTH, "admin6"));
     }
 
     @Test
@@ -46,6 +53,8 @@ class CategoryServiceTest {
         CategoryRequest request = CategoryRequest.builder()
             .name(CategoryType.MENSCLOTHING)
             .build();
+
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
 
         // when
         Long id = categoryService.createCategory(request.toServiceRequest());
@@ -83,9 +92,10 @@ class CategoryServiceTest {
             .hasMessage("해당 카테고리를 찾을 수 없습니다.");
     }
 
-    private Category getCategory(CategoryType type) {
+    private Category getCategory(CategoryType type, String loginUser) {
         Category category = Category.builder()
             .name(type)
+            .createdBy(loginUser)
             .build();
         return category;
     }

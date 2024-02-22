@@ -51,7 +51,7 @@ public class ProductCreateServiceRequest {
      */
     private Long categoryId;
 
-    public Product toEntity() {
+    public Product toEntity(String currentAuditor) {
         return Product.builder()
             .name(this.name)
             .description(this.description)
@@ -63,6 +63,7 @@ public class ProductCreateServiceRequest {
             .endedAt(this.startedAt.plusDays(3))
             .userId(this.userId)
             .categoryId(this.categoryId)
+            .createdBy(currentAuditor)
             .build();
     }
 }
