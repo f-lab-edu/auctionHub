@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "price": "3000",
-  "userId": "4",
-  "productId": "4"
+  "userId": "1",
+  "productId": "1"
 }
 
 ### 상품에 대한 입찰내역을 조회한다.
