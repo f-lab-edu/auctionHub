@@ -55,7 +55,7 @@ public class ProductUpdateServiceRequest {
      */
     private Long categoryId;
 
-    public Product toEntity() {
+    public Product toEntity(String currentAuditor) {
         return Product.builder()
             .id(this.id)
             .name(this.name)
@@ -66,6 +66,7 @@ public class ProductUpdateServiceRequest {
             .minBidPrice(this.minBidPrice)
             .startedAt(this.startedAt)
             .endedAt(this.startedAt.plusDays(3))
+            .updatedBy(currentAuditor)
             .userId(this.userId)
             .categoryId(this.categoryId)
             .build();

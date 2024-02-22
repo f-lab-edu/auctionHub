@@ -27,11 +27,12 @@ public class BidCreateServiceRequest {
      */
     private Long productId;
 
-    public Bid toEntity() {
+    public Bid toEntity(String currentAuditor) {
         return Bid.builder()
             .price(this.price)
             .userId(this.userId)
             .productId(this.productId)
+            .createdBy(currentAuditor)
             .build();
     }
 }

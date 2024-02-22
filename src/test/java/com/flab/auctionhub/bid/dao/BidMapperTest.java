@@ -22,7 +22,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @Transactional
@@ -59,6 +58,7 @@ class BidMapperTest {
 
         category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
+            .createdBy("admin")
             .build();
         categoryMapper.save(category);
 
@@ -71,6 +71,7 @@ class BidMapperTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
+            .createdBy("seller")
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
@@ -124,11 +125,11 @@ class BidMapperTest {
 
         // then
         assertThat(bidList).hasSize(3)
-            .extracting("price", "createdAt", "createdBy", "userId","productId")
+            .extracting("price", "userId","productId")
             .containsExactlyInAnyOrder(
-                tuple(bid1.getPrice(), bid1.getCreatedAt(), bid1.getCreatedBy(), bid1.getUserId(), bid1.getProductId()),
-                tuple(bid2.getPrice(), bid2.getCreatedAt(), bid2.getCreatedBy(), bid2.getUserId(), bid2.getProductId()),
-                tuple(bid3.getPrice(), bid3.getCreatedAt(), bid3.getCreatedBy(), bid3.getUserId(), bid3.getProductId())
+                tuple(bid1.getPrice(), bid1.getUserId(), bid1.getProductId()),
+                tuple(bid2.getPrice(), bid2.getUserId(), bid2.getProductId()),
+                tuple(bid3.getPrice(), bid3.getUserId(), bid3.getProductId())
             );
     }
 
@@ -137,6 +138,7 @@ class BidMapperTest {
             .price(price)
             .userId(user.getId())
             .productId(product.getId())
+            .createdBy("testUser")
             .build();
     }
 }

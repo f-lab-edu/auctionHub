@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.auctionhub.common.util.SessionUtil;
-import com.flab.auctionhub.user.application.UserService;
-import com.flab.auctionhub.user.domain.UserRoleType;
 import com.flab.auctionhub.user.api.request.UserCreateRequest;
 import com.flab.auctionhub.user.api.request.UserLoginRequest;
+import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.application.response.UserCreateResponse;
 import com.flab.auctionhub.user.application.response.UserLoginResponse;
+import com.flab.auctionhub.user.domain.UserRoleType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

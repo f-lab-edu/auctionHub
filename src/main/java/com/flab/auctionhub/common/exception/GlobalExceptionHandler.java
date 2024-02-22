@@ -70,5 +70,19 @@ public class GlobalExceptionHandler {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthenticatedException(UnauthenticatedException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<ErrorResponse> handlePermissionDeniedException(PermissionDeniedException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(HttpSessionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleHttpSessionNotFoundException(HttpSessionNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
 
 }

@@ -3,11 +3,13 @@ package com.flab.auctionhub.product.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
+import static org.mockito.Mockito.when;
 
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
+import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.request.ProductCreateServiceRequest;
 import com.flab.auctionhub.product.application.request.ProductUpdateServiceRequest;
 import com.flab.auctionhub.product.application.response.ProductResponse;
@@ -17,11 +19,13 @@ import com.flab.auctionhub.user.domain.User;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,9 @@ class ProductServiceTest {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @MockBean
+    private LoginUserAuditorAware loginUserAuditorAware;
 
     User user;
 
@@ -62,6 +69,7 @@ class ProductServiceTest {
     void createProduct() {
         // given
         ProductCreateServiceRequest request = getProductCreateServiceRequest("나이키 슈즈", "정품이고 280입니다.", ProductSellingStatus.SELLING);
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
 
         // when
         Long productId = productService.createProduct(request);
@@ -121,6 +129,7 @@ class ProductServiceTest {
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
         ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         productService.createProducts(List.of(request1, request2, request3));
 
         // when
@@ -141,6 +150,7 @@ class ProductServiceTest {
     void findById() {
         // given
         ProductCreateServiceRequest request = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         Long productId = productService.createProduct(request);
 
         // when
@@ -164,6 +174,7 @@ class ProductServiceTest {
     void update() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         Long productId = productService.createProduct(request1);
 
         ProductUpdateServiceRequest request2 = ProductUpdateServiceRequest.builder()
@@ -203,6 +214,7 @@ class ProductServiceTest {
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
         ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         productService.createProducts(List.of(request1, request2, request3));
 
         // when
@@ -236,6 +248,7 @@ class ProductServiceTest {
     private Category getCategory(CategoryType type) {
         Category category = Category.builder()
             .name(type)
+            .createdBy("admin")
             .build();
         return category;
     }

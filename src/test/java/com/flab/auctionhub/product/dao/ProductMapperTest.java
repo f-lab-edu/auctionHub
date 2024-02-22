@@ -3,7 +3,6 @@ package com.flab.auctionhub.product.dao;
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.HOLD;
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.SELLING;
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.STOP_SELLING;
-import static com.flab.auctionhub.user.domain.UserRoleType.ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -12,10 +11,10 @@ import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
 import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
-import java.time.LocalDateTime;
-import java.util.List;
 import com.flab.auctionhub.user.dao.UserMapper;
 import com.flab.auctionhub.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -123,6 +122,7 @@ class ProductMapperTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
+            .updatedBy("updateSeller")
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
@@ -147,7 +147,7 @@ class ProductMapperTest {
         assertThat(result.getCreatedAt()).isNotNull();
         assertThat(result.getCreatedBy()).isNotNull();
         assertThat(result.getUpdatedAt()).isNotNull();
-        assertThat(result.getUpdatedBy()).isNotNull();
+        assertThat(result.getUpdatedBy()).isEqualTo("updateSeller");
         assertThat(result.getUserId()).isEqualTo(user.getId());
         assertThat(result.getCategoryId()).isEqualTo(category.getId());
     }
@@ -186,12 +186,14 @@ class ProductMapperTest {
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .userId(user.getId())
             .categoryId(category.getId())
+            .createdBy("seller")
             .build();
     }
 
     private Category getCategory(CategoryType type) {
         Category category = Category.builder()
             .name(type)
+            .createdBy("admin")
             .build();
         return category;
     }

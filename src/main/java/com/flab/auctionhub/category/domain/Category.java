@@ -1,9 +1,10 @@
 package com.flab.auctionhub.category.domain;
 
-import com.flab.auctionhub.common.entity.BaseEntity;
+import com.flab.auctionhub.common.audit.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -19,7 +20,10 @@ public class Category extends BaseEntity {
     private CategoryType name;
 
     @Builder
-    public Category(CategoryType name) {
+    public Category(Long id, CategoryType name, boolean isDeleted, LocalDateTime createdAt,
+        String createdBy, LocalDateTime updatedAt, String updatedBy) {
+        super(isDeleted, createdAt, createdBy, updatedAt, updatedBy);
+        this.id = id;
         this.name = name;
     }
 }

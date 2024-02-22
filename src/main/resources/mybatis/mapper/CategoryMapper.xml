@@ -5,8 +5,8 @@
 <mapper namespace="com.flab.auctionhub.category.dao.CategoryMapper">
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO category (name)
-    VALUES (#{name})
+    INSERT INTO category (name, created_by)
+    VALUES (#{name}, #{createdBy})
     <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
       select last_insert_id()
     </selectKey>

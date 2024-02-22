@@ -5,6 +5,7 @@ import com.flab.auctionhub.bid.application.response.BidResponse;
 import com.flab.auctionhub.bid.dao.BidMapper;
 import com.flab.auctionhub.bid.domain.Bid;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
+import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import com.flab.auctionhub.user.application.UserService;
@@ -25,22 +26,24 @@ public class BidService {
 
     private final ProductService productService;
 
+    private final LoginUserAuditorAware loginUserAuditorAware;
+
     /**
      * 입찰을 등록한다.
      * @param request 입찰 등록에 필요한 정보
      */
     @Transactional
     public Long createBid(BidCreateServiceRequest request) {
-
         // 회원 여부 조회
         userService.findById(request.getUserId());
 
         // 상품 존재 여부 조회
         ProductResponse productResponse = productService.findById(request.getProductId());
 
+        String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         checkValidPrice(request, productResponse);
 
-        Bid bid = request.toEntity();
+        Bid bid = request.toEntity(currentAuditor);
         bidMapper.save(bid);
         return bid.getId();
     }
