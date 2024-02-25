@@ -85,4 +85,18 @@ public class GlobalExceptionHandler {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(UserRoleTypeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserRoleTypeNotFoundException(UserRoleTypeNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(CategoryTypeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryTypeNotFoundException(CategoryTypeNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(ProductSellingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductSellingNotFoundException(ProductSellingNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
 }

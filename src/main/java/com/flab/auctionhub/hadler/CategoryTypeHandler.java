@@ -5,6 +5,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import com.flab.auctionhub.common.exception.CategoryTypeNotFoundException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 import org.apache.ibatis.type.TypeHandler;
@@ -40,6 +41,6 @@ public class CategoryTypeHandler implements TypeHandler<CategoryType> {
                 return categoryType;
             }
         }
-        return null;
+        throw new CategoryTypeNotFoundException("CategoryType을 찾을 수 없습니다.");
     }
 }

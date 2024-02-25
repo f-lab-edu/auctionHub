@@ -1,10 +1,12 @@
 package com.flab.auctionhub.hadler;
 
+import com.flab.auctionhub.common.exception.ProductSellingNotFoundException;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 import org.apache.ibatis.type.TypeHandler;
@@ -42,6 +44,6 @@ public class ProductSellingTypeHandler implements TypeHandler<ProductSellingStat
                 return productSellingStatus;
             }
         }
-        return null;
+        throw new ProductSellingNotFoundException("ProductSelling 타입을 찾을 수 없습니다.");
     }
 }
