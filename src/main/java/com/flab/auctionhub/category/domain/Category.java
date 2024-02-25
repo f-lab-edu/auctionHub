@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class Category extends BaseEntity {
-
     /**
      * 카테고리 번호
      */

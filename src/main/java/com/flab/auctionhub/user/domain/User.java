@@ -35,7 +35,6 @@ public class User extends BaseEntity {
      */
     private String phoneNumber;
 
-
     @Builder
     public User(Long id, String userId, String password, String username, UserRoleType roleType,
         String phoneNumber, boolean isDeleted, LocalDateTime createdAt, String createdBy,
