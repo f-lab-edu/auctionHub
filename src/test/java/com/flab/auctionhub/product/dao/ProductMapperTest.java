@@ -2,7 +2,7 @@ package com.flab.auctionhub.product.dao;
 
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.HOLD;
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.SELLING;
-import static com.flab.auctionhub.product.domain.ProductSellingStatus.STOP_SELLING;
+import static com.flab.auctionhub.product.domain.ProductSellingStatus.SOLD_OUT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -90,7 +90,7 @@ class ProductMapperTest {
         // given
         Product product1 = getProduct("나이키 슈즈1", "사이즈는 270입니다.", SELLING);
         Product product2 = getProduct("나이키 슈즈2", "사이즈는 280입니다.", HOLD);
-        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", STOP_SELLING);
+        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", SOLD_OUT);
         productMapper.saveAll(List.of(product1, product2, product3));
 
         // when
@@ -116,7 +116,7 @@ class ProductMapperTest {
             .id(product.getId())
             .name("나이키 슈즈2")
             .description("사이즈는 290입니다.")
-            .sellingStatus(STOP_SELLING)
+            .sellingStatus(SOLD_OUT)
             .quickPrice(1000)
             .startBidPrice(1000)
             .minBidPrice(1000)
@@ -158,7 +158,7 @@ class ProductMapperTest {
         // given
         Product product1 = getProduct("나이키 슈즈1", "사이즈는 270입니다.", SELLING);
         Product product2 = getProduct("나이키 슈즈2", "사이즈는 280입니다.", HOLD);
-        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", STOP_SELLING);
+        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", SOLD_OUT);
         productMapper.saveAll(List.of(product1, product2, product3));
 
         // when

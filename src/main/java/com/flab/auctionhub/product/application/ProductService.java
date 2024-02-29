@@ -23,11 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductMapper productMapper;
-
     private final UserService userService;
-
     private final CategoryService categoryService;
-
     private final LoginUserAuditorAware loginUserAuditorAware;
 
     /**
@@ -117,5 +114,19 @@ public class ProductService {
         return productMapper.findAll().stream()
             .map(ProductResponse::of)
             .collect(Collectors.toList());
+    }
+    /**
+     * 상품이 낙찰 되었고 주문이 가능한지 체크한다.
+     */
+    public boolean checkProductOrderAvailability(Long productId, int price) {
+        // 상품 존재 확인
+        ProductResponse productResponse = findById(productId);
+
+        // 낙찰 상태 및 최고 입찰 금액 체크
+        if (!productResponse.getSellingStatus().equals(ProductSellingStatus.SUCCESS_BID)
+            || productResponse.getCurrentBidPrice() != price) {
+            return false;
+        }
+        return true;
     }
 }

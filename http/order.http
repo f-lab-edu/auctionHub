@@ -1,0 +1,27 @@
+### 주문을 생성한다.
+POST localhost:8080/orders
+Content-Type: application/json
+
+{
+  "price": "3000",
+  "orderStatus": "INIT",
+  "productId": "1",
+  "userId": "1"
+}
+
+### 주문 상세 내역을 불러온다.
+GET localhost:8080/orders/1
+
+### 주문 내용을 수정한다.
+PUT localhost:8080/orders
+Content-Type: application/json
+
+{
+  "id": "1",
+  "orderStatus": "COMPLETE",
+  "productId": "1",
+  "userId": "1"
+}
+
+### 유저가 주문한 목록을 불러온다.
+GET localhost:8080/orders/userId=1

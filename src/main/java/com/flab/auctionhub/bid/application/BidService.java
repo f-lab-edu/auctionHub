@@ -71,7 +71,7 @@ public class BidService {
 
         Integer highestBid = bidMapper.selectHighestBidPriceForProduct(
             request.getProductId()).orElseGet(() -> productResponse.getMinBidPrice());
-        if (price < highestBid) {
+        if (price <= highestBid) {
             throw new InvalidPriceException("상품의 최고 입찰액보다 입찰금액이 높아야 합니다.");
         }
     }

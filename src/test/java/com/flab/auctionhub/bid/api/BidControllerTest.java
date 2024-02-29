@@ -58,11 +58,7 @@ class BidControllerTest {
     @DisplayName("신규 입찰가격은 0원을 초과하여야 합니다.")
     void createBidCheckPrice() throws Exception {
         // given
-        BidCreateRequest bid = BidCreateRequest.builder()
-            .price(0)
-            .userId(1L)
-            .productId(1L)
-            .build();
+        BidCreateRequest bid = createBidInfo(0);
 
         MockHttpSession session = new MockHttpSession();
         SessionUtil.setLoginUserId(session, "USER_ID");

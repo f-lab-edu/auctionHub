@@ -127,7 +127,7 @@ class ProductServiceTest {
     void getSellingProducts() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
+        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.SOLD_OUT);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
         when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         productService.createProducts(List.of(request1, request2, request3));
@@ -212,7 +212,7 @@ class ProductServiceTest {
     void findAllProduct() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
+        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.SOLD_OUT);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
         when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
         productService.createProducts(List.of(request1, request2, request3));
@@ -225,7 +225,7 @@ class ProductServiceTest {
             .extracting("name", "description", "sellingStatus")
             .containsExactlyInAnyOrder(
                 tuple(request1.getName(), request1.getDescription(), ProductSellingStatus.SELLING),
-                tuple(request2.getName(), request2.getDescription(), ProductSellingStatus.STOP_SELLING),
+                tuple(request2.getName(), request2.getDescription(), ProductSellingStatus.SOLD_OUT),
                 tuple(request3.getName(), request3.getDescription(), ProductSellingStatus.HOLD)
             );
     }

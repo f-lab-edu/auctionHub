@@ -3,6 +3,8 @@ package com.flab.auctionhub.common.exception;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
 import com.flab.auctionhub.category.exception.WrongCategoryValueException;
+import com.flab.auctionhub.order.exception.OrderNotPossibleException;
+import com.flab.auctionhub.order.exception.WrongOrderStatusException;
 import com.flab.auctionhub.product.exception.ProductNotFoundException;
 import com.flab.auctionhub.user.exception.DuplicatedUserIdException;
 import com.flab.auctionhub.user.exception.UserNotFoundException;
@@ -97,6 +99,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductSellingNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProductSellingNotFoundException(ProductSellingNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(WrongOrderStatusException.class)
+    public ResponseEntity<ErrorResponse> handleWrongOrderStatusException(WrongOrderStatusException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(OrderNotPossibleException.class)
+    public ResponseEntity<ErrorResponse> handleOrderNotPossibleException(OrderNotPossibleException exception) {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 }
