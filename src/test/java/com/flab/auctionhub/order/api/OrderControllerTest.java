@@ -1,5 +1,12 @@
 package com.flab.auctionhub.order.api;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.order.api.request.OrderCreateRequest;
@@ -7,6 +14,7 @@ import com.flab.auctionhub.order.api.request.OrderUpdateRequest;
 import com.flab.auctionhub.order.application.OrderService;
 import com.flab.auctionhub.order.domain.OrderStatus;
 import com.flab.auctionhub.user.domain.UserRoleType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +23,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(OrderController.class)
@@ -35,15 +37,20 @@ class OrderControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    MockHttpSession session;
+
+    @BeforeEach
+    void beforeEach() {
+        session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+    }
+
     @Test
     @DisplayName("주문을 생성한다.")
     void createOrder() throws Exception {
         // given
         OrderCreateRequest order = createOrderInfo(30000, OrderStatus.INIT);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
@@ -62,10 +69,6 @@ class OrderControllerTest {
         // given
         OrderCreateRequest order = createOrderInfo(0, OrderStatus.INIT);
 
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
         // when // then
         mockMvc.perform(
                 post("/orders")
@@ -83,10 +86,6 @@ class OrderControllerTest {
     void createOrderCheckOrderStatus() throws Exception {
         // given
         OrderCreateRequest order = createOrderInfo(30000, null);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
@@ -110,9 +109,6 @@ class OrderControllerTest {
             .productId(1L)
             .userId(null)
             .build();
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
@@ -136,9 +132,6 @@ class OrderControllerTest {
             .productId(null)
             .userId(1L)
             .build();
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
@@ -155,11 +148,6 @@ class OrderControllerTest {
     @Test
     @DisplayName("주문 상세 내역을 불러온다.")
     void getOrder() throws Exception {
-        // given
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
         // when // then
         mockMvc.perform(
                 get("/orders/{id}", 1L)
@@ -176,18 +164,15 @@ class OrderControllerTest {
     void updateOrder() throws Exception {
         // given
         OrderUpdateRequest order = OrderUpdateRequest.builder()
+            .id(1L)
             .orderStatus(OrderStatus.COMPLETED)
             .productId(1L)
             .userId(1L)
             .build();
 
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
         // when // then
         mockMvc.perform(
-                get("/orders/{id}", 1L)
+                put("/orders")
                     .session(session)
                     .content(objectMapper.writeValueAsString(order))
                     .contentType(MediaType.APPLICATION_JSON)
@@ -197,14 +182,98 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("주문 내용을 수정할때 주문아이디는 필수 값이다.")
+    void updateOrderCheckId() throws Exception {
+        // given
+        OrderUpdateRequest order = OrderUpdateRequest.builder()
+            .orderStatus(OrderStatus.COMPLETED)
+            .productId(1L)
+            .userId(1L)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                put("/orders")
+                    .session(session)
+                    .content(objectMapper.writeValueAsString(order))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("주문 번호는 필수 입니다."));
+    }
+
+    @Test
+    @DisplayName("주문 내용을 수정할때 주문 상태는 필수 값이다.")
+    void updateOrderCheckOrderStatus() throws Exception {
+        // given
+        OrderUpdateRequest order = OrderUpdateRequest.builder()
+            .id(1L)
+            .productId(1L)
+            .userId(1L)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                put("/orders")
+                    .session(session)
+                    .content(objectMapper.writeValueAsString(order))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("주문 상태는 필수입니다."));
+    }
+
+    @Test
+    @DisplayName("주문 내용을 수정할때 회원 번호는 필수 값이다.")
+    void updateOrderCheckUserId() throws Exception {
+        // given
+        OrderUpdateRequest order = OrderUpdateRequest.builder()
+            .id(1L)
+            .orderStatus(OrderStatus.COMPLETED)
+            .productId(1L)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                put("/orders")
+                    .session(session)
+                    .content(objectMapper.writeValueAsString(order))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("회원 번호는 필수 입니다."));
+    }
+
+    @Test
+    @DisplayName("주문 내용을 수정할때 상품 번호는 필수 값이다.")
+    void updateOrderCheckProductId() throws Exception {
+        // given
+        OrderUpdateRequest order = OrderUpdateRequest.builder()
+            .id(1L)
+            .orderStatus(OrderStatus.COMPLETED)
+            .userId(1L)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                put("/orders")
+                    .session(session)
+                    .content(objectMapper.writeValueAsString(order))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("상품 번호는 필수 입니다."));
+    }
+
+    @Test
     @DisplayName("유저가 주문 목록을 불러온다.")
     void getUserOrders() throws Exception {
         // given
         OrderCreateRequest order = createOrderInfo(3000, OrderStatus.INIT);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
