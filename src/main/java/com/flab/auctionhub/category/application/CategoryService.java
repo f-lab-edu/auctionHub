@@ -1,13 +1,13 @@
 package com.flab.auctionhub.category.application;
 
 import com.flab.auctionhub.category.application.request.CategoryServiceRequest;
+import com.flab.auctionhub.category.application.response.CategoryResponse;
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
-import com.flab.auctionhub.category.application.response.CategoryResponse;
-import java.util.List;
-import java.util.stream.Collectors;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
 import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +45,7 @@ public class CategoryService {
      * 카테고리 번호로 상세 조회한다.
      * @param id 카테고리 아이디
      */
-    public CategoryResponse findById(Long id) {
+    public CategoryResponse findCategoryById(Long id) {
         return categoryMapper.findById(id)
             .map(CategoryResponse::of)
             .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));

@@ -1,5 +1,14 @@
 package com.flab.auctionhub.order.application;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
+import static com.flab.auctionhub.util.TestUtils.TEST_SELLER;
+import static com.flab.auctionhub.util.TestUtils.TEST_USER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.Mockito.when;
+
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
@@ -14,6 +23,9 @@ import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import com.flab.auctionhub.user.dao.UserMapper;
 import com.flab.auctionhub.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,16 +35,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.Mockito.when;
-
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class OrderServiceTest {
@@ -71,7 +74,7 @@ class OrderServiceTest {
 
         category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
-            .createdBy("admin")
+            .createdBy(TEST_ADMIN)
             .build();
         categoryMapper.save(category);
 
@@ -91,7 +94,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when
         Long id = orderService.createOrder(request);
@@ -110,7 +113,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when // then
         assertThatThrownBy(() -> orderService.createOrder(request))
@@ -130,7 +133,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when // then
         assertThatThrownBy(() -> orderService.createOrder(request))
@@ -148,7 +151,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
         Long id = orderService.createOrder(request);
 
         // when
@@ -172,7 +175,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
         Long id = orderService.createOrder(request);
 
         OrderUpdateServiceRequest updateRequest = OrderUpdateServiceRequest.builder()
@@ -196,7 +199,7 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("유저가 주문한 목록을 불러온다.")
-    void getUserOrders() {
+    void findOrdersByUserId() {
         // given
         OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()
             .price(30000)
@@ -204,7 +207,7 @@ class OrderServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
         orderService.createOrder(request);
         OrderCreateServiceRequest request2 = OrderCreateServiceRequest.builder()
             .price(30000)
@@ -215,7 +218,7 @@ class OrderServiceTest {
         orderService.createOrder(request2);
 
         // when
-        List<OrderResponse> orderResponseList = orderService.getUserOrders(user.getId());
+        List<OrderResponse> orderResponseList = orderService.findOrdersByUserId(user.getId());
 
         // then
         assertThat(orderResponseList).hasSize(2)
@@ -237,7 +240,7 @@ class OrderServiceTest {
             .currentBidPrice(30000)
             .startedAt(LocalDateTime.of(2023, 12, 22, 05, 44, 37))
             .endedAt(LocalDateTime.of(2023, 12, 25, 05, 44, 37))
-            .createdBy("seller")
+            .createdBy(TEST_SELLER)
             .userId(user.getId())
             .categoryId(category.getId())
             .build();

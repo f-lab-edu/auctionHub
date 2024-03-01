@@ -1,9 +1,10 @@
 package com.flab.auctionhub.order.api;
 
+import com.flab.auctionhub.order.api.request.OrderCreateRequest;
 import com.flab.auctionhub.order.api.request.OrderUpdateRequest;
 import com.flab.auctionhub.order.application.OrderService;
-import com.flab.auctionhub.order.api.request.OrderCreateRequest;
 import com.flab.auctionhub.order.application.response.OrderResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,8 +58,8 @@ public class OrderController {
      * @param userId 유저 아이디
      */
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderResponse>> getUserOrders(@RequestParam Long userId) {
-        List<OrderResponse> orderList = orderService.getUserOrders(userId);
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@RequestParam Long userId) {
+        List<OrderResponse> orderList = orderService.findOrdersByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(orderList);
     }
 }

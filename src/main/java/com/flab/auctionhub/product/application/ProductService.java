@@ -34,9 +34,9 @@ public class ProductService {
     @Transactional
     public Long createProduct(ProductCreateServiceRequest request) {
         // 회원 여부 조회
-        userService.findById(request.getUserId());
+        userService.findUserById(request.getUserId());
         // 카테고리 존재 여부 조회
-        categoryService.findById(request.getCategoryId());
+        categoryService.findCategoryById(request.getCategoryId());
         String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         Product product = request.toEntity(currentAuditor);
         productMapper.save(product);
@@ -53,9 +53,9 @@ public class ProductService {
 
         for (ProductCreateServiceRequest productCreateServiceRequest : request) {
             // 회원 여부 조회
-            userService.findById(productCreateServiceRequest.getUserId());
+            userService.findUserById(productCreateServiceRequest.getUserId());
             // 카테고리 존재 여부 조회
-            categoryService.findById(productCreateServiceRequest.getCategoryId());
+            categoryService.findCategoryById(productCreateServiceRequest.getCategoryId());
             String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
             Product product = productCreateServiceRequest.toEntity(currentAuditor);
             productList.add(product);
@@ -84,7 +84,7 @@ public class ProductService {
      * 상품 id로 상품을 조회한다.
      * @param id 상품 아이디
      */
-    public ProductResponse findById(Long id) {
+    public ProductResponse findProductById(Long id) {
         return productMapper.findById(id)
             .map(ProductResponse::of)
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
@@ -94,11 +94,11 @@ public class ProductService {
      * 상품을 수정한다.
      * @param request 상품 수정에 필요한 정보
      */
-    public ProductResponse update(ProductUpdateServiceRequest request) {
+    public ProductResponse updateProduct(ProductUpdateServiceRequest request) {
         // 회원 여부 주회
-        userService.findById(request.getUserId());
+        userService.findUserById(request.getUserId());
         // 카테 고리 존재 여부 조회
-        categoryService.findById(request.getCategoryId());
+        categoryService.findCategoryById(request.getCategoryId());
         String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         Product product = request.toEntity(currentAuditor);
         productMapper.update(product);
@@ -110,7 +110,7 @@ public class ProductService {
     /**
      * 전체 상품을 조회한다.
      */
-    public List<ProductResponse> findAllProduct() {
+    public List<ProductResponse> findAllProducts() {
         return productMapper.findAll().stream()
             .map(ProductResponse::of)
             .collect(Collectors.toList());
@@ -120,7 +120,7 @@ public class ProductService {
      */
     public boolean checkProductOrderAvailability(Long productId, int price) {
         // 상품 존재 확인
-        ProductResponse productResponse = findById(productId);
+        ProductResponse productResponse = findProductById(productId);
 
         // 낙찰 상태 및 최고 입찰 금액 체크
         if (!productResponse.getSellingStatus().equals(ProductSellingStatus.SUCCESS_BID)

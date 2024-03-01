@@ -14,6 +14,7 @@ import com.flab.auctionhub.category.api.request.CategoryRequest;
 import com.flab.auctionhub.category.application.response.CategoryResponse;
 import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.user.domain.UserRoleType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,15 @@ class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
+    MockHttpSession session;
+
+    @BeforeEach
+    void beforeEach() {
+        session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.ADMIN);
+    }
+
     @Test
     @DisplayName("신규 카테고리를 등록한다.")
     void createCategory() throws Exception {
@@ -43,11 +53,6 @@ class CategoryControllerTest {
         CategoryRequest request = CategoryRequest.builder()
             .name(CategoryType.BAG)
             .build();
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.ADMIN);
-
 
         // when // then
         mockMvc.perform(
@@ -67,10 +72,6 @@ class CategoryControllerTest {
         CategoryRequest request = CategoryRequest.builder()
             .build();
 
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.ADMIN);
-
         // when // then
         mockMvc.perform(
                 post("/category")
@@ -86,13 +87,9 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("전체 카테고리를 조회한다.")
-    void findAllCategory() throws Exception {
+    void getAllCategory() throws Exception {
         // given
         List<CategoryResponse> result = List.of();
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         when(categoryService.findAllCategory()).thenReturn(result);
 

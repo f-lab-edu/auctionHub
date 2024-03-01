@@ -5,6 +5,7 @@ import com.flab.auctionhub.bid.api.request.BidCreateRequest;
 import com.flab.auctionhub.bid.application.BidService;
 import com.flab.auctionhub.common.util.SessionUtil;
 import com.flab.auctionhub.user.domain.UserRoleType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,20 @@ class BidControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    MockHttpSession session;
+
+    @BeforeEach
+    void beforeEach() {
+        session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+    }
+
     @Test
     @DisplayName("신규 입찰을 등록한다.")
     void createBid() throws Exception {
         // given
-        BidCreateRequest bid = createBidInfo(3000);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+        BidCreateRequest bid = getBidRequest(3000);
 
         // when // then
         mockMvc.perform(
@@ -58,11 +64,7 @@ class BidControllerTest {
     @DisplayName("신규 입찰가격은 0원을 초과하여야 합니다.")
     void createBidCheckPrice() throws Exception {
         // given
-        BidCreateRequest bid = createBidInfo(0);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+        BidCreateRequest bid = getBidRequest(0);
 
         // when // then
         mockMvc.perform(
@@ -85,10 +87,6 @@ class BidControllerTest {
             .productId(1L)
             .build();
 
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
         // when // then
         mockMvc.perform(
                 post("/bids")
@@ -110,10 +108,6 @@ class BidControllerTest {
             .userId(1L)
             .build();
 
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
         // when // then
         mockMvc.perform(
                 post("/bids")
@@ -128,17 +122,14 @@ class BidControllerTest {
 
     @Test
     @DisplayName("상품에 따른 입찰 내역을 불러온다.")
-    void getBidListForProduct() throws Exception {
+    void getBidsByProductId() throws Exception {
         // given
-        BidCreateRequest bid = createBidInfo(2000);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+        BidCreateRequest bid = getBidRequest(2000);
 
         // when // then
         mockMvc.perform(
-                get("/bids/{productId}", bid.getProductId())
+                get("/bids", bid.getProductId())
+                    .param("productId", String.valueOf(bid.getProductId()))
                     .session(session)
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -147,7 +138,7 @@ class BidControllerTest {
             .andExpect(jsonPath("$").isArray());
     }
 
-    private BidCreateRequest createBidInfo(int price) {
+    private BidCreateRequest getBidRequest(int price) {
         return BidCreateRequest.builder()
             .price(price)
             .userId(1L)

@@ -50,7 +50,7 @@ class OrderControllerTest {
     @DisplayName("주문을 생성한다.")
     void createOrder() throws Exception {
         // given
-        OrderCreateRequest order = createOrderInfo(30000, OrderStatus.INIT);
+        OrderCreateRequest order = getOrderRequest(30000, OrderStatus.INIT);
 
         // when // then
         mockMvc.perform(
@@ -67,7 +67,7 @@ class OrderControllerTest {
     @DisplayName("주문을 생성할때 가격은 0원을 초과하여야 합니다.")
     void createOrderCheckPrice() throws Exception {
         // given
-        OrderCreateRequest order = createOrderInfo(0, OrderStatus.INIT);
+        OrderCreateRequest order = getOrderRequest(0, OrderStatus.INIT);
 
         // when // then
         mockMvc.perform(
@@ -85,7 +85,7 @@ class OrderControllerTest {
     @DisplayName("주문을 생성할 때 주문 상태는 필수입니다.")
     void createOrderCheckOrderStatus() throws Exception {
         // given
-        OrderCreateRequest order = createOrderInfo(30000, null);
+        OrderCreateRequest order = getOrderRequest(30000, null);
 
         // when // then
         mockMvc.perform(
@@ -271,9 +271,9 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("유저가 주문 목록을 불러온다.")
-    void getUserOrders() throws Exception {
+    void getOrdersByUserId() throws Exception {
         // given
-        OrderCreateRequest order = createOrderInfo(3000, OrderStatus.INIT);
+        OrderCreateRequest order = getOrderRequest(3000, OrderStatus.INIT);
 
         // when // then
         mockMvc.perform(
@@ -287,7 +287,7 @@ class OrderControllerTest {
         .andExpect(jsonPath("$").isArray());
     }
 
-    private OrderCreateRequest createOrderInfo(int price, OrderStatus status) {
+    private OrderCreateRequest getOrderRequest(int price, OrderStatus status) {
         return OrderCreateRequest.builder()
             .price(price)
             .orderStatus(status)

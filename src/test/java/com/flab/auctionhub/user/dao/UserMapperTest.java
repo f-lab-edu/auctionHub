@@ -1,5 +1,6 @@
 package com.flab.auctionhub.user.dao;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -15,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class UserMapperTest {

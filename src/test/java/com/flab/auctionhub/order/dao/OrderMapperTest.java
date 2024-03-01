@@ -1,5 +1,12 @@
 package com.flab.auctionhub.order.dao;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
+import static com.flab.auctionhub.util.TestUtils.TEST_SELLER;
+import static com.flab.auctionhub.util.TestUtils.TEST_USER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
 import com.flab.auctionhub.category.domain.CategoryType;
@@ -10,6 +17,8 @@ import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import com.flab.auctionhub.user.dao.UserMapper;
 import com.flab.auctionhub.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class OrderMapperTest {
@@ -46,8 +50,6 @@ class OrderMapperTest {
 
     Category category;
 
-    private String testUser = "testUser";
-
     @BeforeEach
     void BeforeEach() {
         user = User.builder()
@@ -60,7 +62,7 @@ class OrderMapperTest {
 
         category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
-            .createdBy(testUser)
+            .createdBy(TEST_ADMIN)
             .build();
         categoryMapper.save(category);
 
@@ -74,7 +76,7 @@ class OrderMapperTest {
             .currentBidPrice(30000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
-            .createdBy(testUser)
+            .createdBy(TEST_SELLER)
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
@@ -90,7 +92,7 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_SELLER)
             .build();
 
         // when
@@ -109,7 +111,7 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_USER)
             .build();
         orderMapper.save(order);
 
@@ -133,7 +135,7 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_USER)
             .build();
         orderMapper.save(order);
         Order updateOrder = Order.builder()
@@ -141,7 +143,7 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.COMPLETED)
             .userId(user.getId())
             .productId(product.getId())
-            .updatedBy(testUser)
+            .updatedBy(TEST_USER)
             .build();
 
         // when
@@ -154,9 +156,9 @@ class OrderMapperTest {
         assertThat(result.getOrderStatus()).isEqualTo(updateOrder.getOrderStatus());
         assertThat(result.getUserId()).isEqualTo(updateOrder.getUserId());
         assertThat(result.getCreatedAt()).isNotNull();
-        assertThat(result.getCreatedBy()).isEqualTo(testUser);
+        assertThat(result.getCreatedBy()).isEqualTo(TEST_USER);
         assertThat(result.getUpdatedAt()).isNotNull();
-        assertThat(result.getUpdatedBy()).isEqualTo(testUser);
+        assertThat(result.getUpdatedBy()).isEqualTo(TEST_USER);
 
 
     }
@@ -170,14 +172,14 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_USER)
             .build();
         Order order2 = Order.builder()
             .price(30000)
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_USER)
             .build();
 
         Order order3 = Order.builder()
@@ -185,7 +187,7 @@ class OrderMapperTest {
             .orderStatus(OrderStatus.INIT)
             .userId(user.getId())
             .productId(product.getId())
-            .createdBy(testUser)
+            .createdBy(TEST_USER)
             .build();
         orderMapper.save(order1);
         orderMapper.save(order2);

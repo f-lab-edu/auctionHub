@@ -10,11 +10,11 @@ import com.flab.auctionhub.order.exception.OrderNotFoundException;
 import com.flab.auctionhub.order.exception.OrderNotPossibleException;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.user.application.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,7 +33,7 @@ public class OrderService {
     @Transactional
     public Long createOrder(OrderCreateServiceRequest request) {
         // 회원 여부 조회
-        userService.findById(request.getUserId());
+        userService.findUserById(request.getUserId());
         // 주문 가능한 상품인지 체크
         if (!productService.checkProductOrderAvailability(request.getProductId(), request.getPrice())) {
             throw new OrderNotPossibleException("주문 가능한 상품이 아닙니다.");
@@ -60,9 +60,9 @@ public class OrderService {
      */
     public OrderResponse updateOrder(OrderUpdateServiceRequest request) {
         // 회원 여부 조회
-        userService.findById(request.getUserId());
+        userService.findUserById(request.getUserId());
         // 상품 존재 여부 조회
-        productService.findById(request.getProductId());
+        productService.findProductById(request.getProductId());
         String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         Order order = request.toEntity(currentAuditor);
         orderMapper.update(order);
@@ -73,7 +73,7 @@ public class OrderService {
      * 유저가 주문한 목록을 불러온다.
      * @param userId 유저 아이디
      */
-    public List<OrderResponse> getUserOrders(Long userId) {
+    public List<OrderResponse> findOrdersByUserId(Long userId) {
         List<Order> orderList = orderMapper.findAllByUserId(userId);
         return orderList.stream()
             .map(OrderResponse::of)

@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +43,22 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    MockHttpSession session;
+
+    @BeforeEach
+    void beforeEach() {
+        session = new MockHttpSession();
+        SessionUtil.setLoginUserId(session, "USER_ID");
+        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
+    }
+
     @Test
     @DisplayName("상품을 등록한다.")
     void createProducts() throws Exception {
         // given
-        ProductCreateRequest request = getProductCreateRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
+        ProductCreateRequest request = getProductRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -71,18 +76,12 @@ class ProductControllerTest {
     @DisplayName("상품을 등록할 때 최소 1개 이상 최대 3개 이하여야 합니다.")
     void createProductsCheckSize() throws Exception {
         // given
-        ProductCreateRequest request1 = getProductCreateRequest("나이키 슈즈1", "정품이고 250입니다.", ProductSellingStatus.SELLING);
-        ProductCreateRequest request2 = getProductCreateRequest("나이키 슈즈2", "정품이고 260입니다.", ProductSellingStatus.SELLING);
-        ProductCreateRequest request3 = getProductCreateRequest("나이키 슈즈3", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        ProductCreateRequest request4 = getProductCreateRequest("나이키 슈즈4", "정품이고 280입니다.", ProductSellingStatus.SELLING);
-
+        ProductCreateRequest request1 = getProductRequest("나이키 슈즈1", "정품이고 250입니다.", ProductSellingStatus.SELLING);
+        ProductCreateRequest request2 = getProductRequest("나이키 슈즈2", "정품이고 260입니다.", ProductSellingStatus.SELLING);
+        ProductCreateRequest request3 = getProductRequest("나이키 슈즈3", "정품이고 270입니다.", ProductSellingStatus.SELLING);
+        ProductCreateRequest request4 = getProductRequest("나이키 슈즈4", "정품이고 280입니다.", ProductSellingStatus.SELLING);
         List<ProductCreateRequest> productCreateRequestList = Arrays.asList(request1, request2, request3, request4);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -112,12 +111,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -146,12 +140,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -181,12 +170,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -216,12 +200,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -251,12 +230,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -285,12 +259,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -319,12 +288,7 @@ class ProductControllerTest {
             .categoryId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -353,12 +317,7 @@ class ProductControllerTest {
             .userId(1L)
             .build();
         List<ProductCreateRequest> productCreateRequestList = Collections.singletonList(request);
-
         ProductsCreateRequest productsCreateRequest = new ProductsCreateRequest(productCreateRequestList);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.SELLER);
 
         // when // then
         mockMvc.perform(
@@ -374,15 +333,10 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("전체 상품을 조회한다.")
-    void findAllProduct() throws Exception {
+    void getAllProducts() throws Exception {
         // given
         List<ProductResponse> result = List.of();
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
-
-        when(productService.findAllProduct()).thenReturn(result);
+        when(productService.findAllProducts()).thenReturn(result);
 
         // when // then
         mockMvc.perform(
@@ -397,9 +351,9 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("상품번호를 이용해 해당 상품을 조회한다.")
-    void findById() throws Exception {
+    void getProductById() throws Exception {
         // given
-        ProductCreateRequest request = getProductCreateRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
+        ProductCreateRequest request = getProductRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
         productService.createProducts(List.of(request.toServiceRequest()));
         Long id = 1L;
         ProductResponse productResponse = ProductResponse.builder()
@@ -413,11 +367,7 @@ class ProductControllerTest {
             .currentBidPrice(request.getMinBidPrice())
             .startedAt(request.getStartedAt())
             .build();
-        when(productService.findById(id)).thenReturn(productResponse);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
+        when(productService.findProductById(id)).thenReturn(productResponse);
 
         // when // then
         mockMvc.perform(
@@ -432,7 +382,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("상품을 수정한다.")
-    void update() throws Exception {
+    void updateProduct() throws Exception {
         // given
         ProductUpdateRequest request = ProductUpdateRequest.builder()
             .id(1L)
@@ -465,12 +415,7 @@ class ProductControllerTest {
     void getSellingProducts() throws Exception {
         // given
         List<ProductResponse> result = List.of();
-
         when(productService.getSellingProducts()).thenReturn(result);
-
-        MockHttpSession session = new MockHttpSession();
-        SessionUtil.setLoginUserId(session, "USER_ID");
-        SessionUtil.setLoginUserRole(session, UserRoleType.MEMBER);
 
         // when // then
         mockMvc.perform(
@@ -482,7 +427,7 @@ class ProductControllerTest {
         .andExpect(jsonPath("$").isArray());
     }
 
-    private ProductCreateRequest getProductCreateRequest(String name, String description, ProductSellingStatus status) {
+    private ProductCreateRequest getProductRequest(String name, String description, ProductSellingStatus status) {
         return ProductCreateRequest.builder()
             .name(name)
             .description(description)
