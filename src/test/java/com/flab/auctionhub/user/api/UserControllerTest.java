@@ -43,7 +43,7 @@ class UserControllerTest {
     @DisplayName("신규 회원을 등록한다.") // JUnit5 에서 해당 테스트의 이름을 좀 더 의미 있게 정의하기 위해 사용되는 어노테이션
     void createUser() throws Exception {
         // given
-        UserCreateRequest user = CreateUserInfo1();
+        UserCreateRequest user = getUserRequest();
 
         // when // then
         mockMvc.perform(
@@ -59,6 +59,7 @@ class UserControllerTest {
     void createUserWithoutUserId() throws Exception {
         // given
         UserCreateRequest user = UserCreateRequest.builder()
+            .userId(null)
             .password("testpassword")
             .username("testusername")
             .phoneNumber("010-1234-1234")
@@ -82,6 +83,7 @@ class UserControllerTest {
         // given
         UserCreateRequest user = UserCreateRequest.builder()
             .userId("userid")
+            .password(null)
             .username("testusername")
             .phoneNumber("010-1234-1234")
             .build();
@@ -104,6 +106,7 @@ class UserControllerTest {
         // given
         UserCreateRequest user = UserCreateRequest.builder()
             .userId("userid")
+            .username(null)
             .password("testpassword")
             .phoneNumber("010-1234-1234")
             .build();
@@ -128,6 +131,7 @@ class UserControllerTest {
             .userId("userid")
             .password("testpassword")
             .username("testusername")
+            .phoneNumber(null)
             .build();
         userService.createUser(user.toServiceRequest());
 
@@ -229,11 +233,11 @@ class UserControllerTest {
 
     @Test
     @DisplayName("전체 회원을 조회한다.")
-    void findAllUser() throws Exception {
+    void getAllUsers() throws Exception {
         // given
         List<UserCreateResponse> result = List.of();
 
-        when(userService.findAllUser()).thenReturn(result);
+        when(userService.getAllUsers()).thenReturn(result);
 
         // when // then
         mockMvc.perform(
@@ -247,9 +251,9 @@ class UserControllerTest {
 
     @Test
     @DisplayName("id를 이용하여 회원을 조회한다.")
-    void findById() throws Exception {
+    void getUserById() throws Exception {
         // given
-        UserCreateRequest userCreateRequest = CreateUserInfo1();
+        UserCreateRequest userCreateRequest = getUserRequest();
         Long id = userService.createUser(userCreateRequest.toServiceRequest());
         UserCreateResponse userCreateResponse = new UserCreateResponse(
             userCreateRequest.getUserId(), userCreateRequest.getUsername(), UserRoleType.MEMBER,
@@ -259,7 +263,7 @@ class UserControllerTest {
         SessionUtil.setLoginUserId(session, userCreateResponse.getUserId());
         SessionUtil.setLoginUserRole(session, userCreateResponse.getRoleType());
 
-        when(userService.findById(id)).thenReturn(userCreateResponse);
+        when(userService.findUserById(id)).thenReturn(userCreateResponse);
 
         // when // then
         mockMvc.perform(
@@ -275,7 +279,7 @@ class UserControllerTest {
     @DisplayName("회원 로그인을 한다.")
     void login() throws Exception {
         // given
-        UserCreateRequest userCreateRequest = CreateUserInfo1();
+        UserCreateRequest userCreateRequest = getUserRequest();
         userService.createUser(userCreateRequest.toServiceRequest());
         UserLoginRequest userLoginRequest = UserLoginRequest.builder()
             .userId(userCreateRequest.getUserId())
@@ -344,7 +348,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원 로그아웃을 한다.")
-    void logoutUser() throws Exception {
+    void logout() throws Exception {
         // given
         MockHttpSession session = new MockHttpSession();
 
@@ -358,7 +362,7 @@ class UserControllerTest {
             .andExpect(status().isOk());
     }
 
-    private UserCreateRequest CreateUserInfo1() {
+    private UserCreateRequest getUserRequest() {
         return UserCreateRequest.builder()
             .userId("userid")
             .password("testpassword")

@@ -1,5 +1,8 @@
 package com.flab.auctionhub.product.application;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
+import static com.flab.auctionhub.util.TestUtils.TEST_SELLER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -29,7 +32,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class ProductServiceTest {
@@ -69,7 +72,7 @@ class ProductServiceTest {
     void createProduct() {
         // given
         ProductCreateServiceRequest request = getProductCreateServiceRequest("나이키 슈즈", "정품이고 280입니다.", ProductSellingStatus.SELLING);
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_SELLER));
 
         // when
         Long productId = productService.createProduct(request);
@@ -127,9 +130,9 @@ class ProductServiceTest {
     void getSellingProducts() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
+        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.SOLD_OUT);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_SELLER));
         productService.createProducts(List.of(request1, request2, request3));
 
         // when
@@ -147,14 +150,14 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 id로 상품을 조회한다.")
-    void findById() {
+    void findProductById() {
         // given
         ProductCreateServiceRequest request = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_SELLER));
         Long productId = productService.createProduct(request);
 
         // when
-        ProductResponse productResponse = productService.findById(productId);
+        ProductResponse productResponse = productService.findProductById(productId);
 
         // then
         assertThat(productResponse.getId()).isNotNull();
@@ -171,10 +174,10 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품을 수정한다.")
-    void update() {
+    void updateProduct() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_SELLER));
         Long productId = productService.createProduct(request1);
 
         ProductUpdateServiceRequest request2 = ProductUpdateServiceRequest.builder()
@@ -189,10 +192,10 @@ class ProductServiceTest {
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
-        productService.update(request2);
+        productService.updateProduct(request2);
 
         // when
-        ProductResponse productResponse = productService.findById(productId);
+        ProductResponse productResponse = productService.findProductById(productId);
 
         // then
         assertThat(productResponse.getId()).isNotNull();
@@ -209,23 +212,23 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("전체 상품을 조회한다.")
-    void findAllProduct() {
+    void findAllProducts() {
         // given
         ProductCreateServiceRequest request1 = getProductCreateServiceRequest("나이키 슈즈1", "정품이고 270입니다.", ProductSellingStatus.SELLING);
-        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.STOP_SELLING);
+        ProductCreateServiceRequest request2 = getProductCreateServiceRequest("나이키 슈즈2", "정품이고 280입니다.", ProductSellingStatus.SOLD_OUT);
         ProductCreateServiceRequest request3 = getProductCreateServiceRequest("나이키 슈즈3", "정품이고 290입니다.", ProductSellingStatus.HOLD);
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("seller"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_SELLER));
         productService.createProducts(List.of(request1, request2, request3));
 
         // when
-        List<ProductResponse> productResponseList = productService.findAllProduct();
+        List<ProductResponse> productResponseList = productService.findAllProducts();
 
         // then
         assertThat(productResponseList).hasSize(3)
             .extracting("name", "description", "sellingStatus")
             .containsExactlyInAnyOrder(
                 tuple(request1.getName(), request1.getDescription(), ProductSellingStatus.SELLING),
-                tuple(request2.getName(), request2.getDescription(), ProductSellingStatus.STOP_SELLING),
+                tuple(request2.getName(), request2.getDescription(), ProductSellingStatus.SOLD_OUT),
                 tuple(request3.getName(), request3.getDescription(), ProductSellingStatus.HOLD)
             );
     }
@@ -248,7 +251,7 @@ class ProductServiceTest {
     private Category getCategory(CategoryType type) {
         Category category = Category.builder()
             .name(type)
-            .createdBy("admin")
+            .createdBy(TEST_ADMIN)
             .build();
         return category;
     }

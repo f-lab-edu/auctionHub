@@ -25,11 +25,15 @@ class ProductSellingStatusTest {
         // when
         ProductSellingStatus selling = ProductSellingStatus.SELLING;
         ProductSellingStatus hold = ProductSellingStatus.HOLD;
-        ProductSellingStatus stopSelling = ProductSellingStatus.STOP_SELLING;
+        ProductSellingStatus soldOut = ProductSellingStatus.SOLD_OUT;
+        ProductSellingStatus successBid = ProductSellingStatus.SUCCESS_BID;
+        ProductSellingStatus failBid = ProductSellingStatus.FAIL_BID;
 
         // then
         assertThat(selling).isEqualTo(ProductSellingStatus.getProductSellingType("판매중"));
         assertThat(hold).isEqualTo(ProductSellingStatus.getProductSellingType("판매대기"));
-        assertThat(stopSelling).isEqualTo(ProductSellingStatus.getProductSellingType("판매중지"));
+        assertThat(soldOut).isEqualTo(ProductSellingStatus.getProductSellingType("판매완료"));
+        assertThat(successBid).isEqualTo(ProductSellingStatus.getProductSellingType("낙찰"));
+        assertThat(failBid).isEqualTo(ProductSellingStatus.getProductSellingType("유찰"));
     }
 }

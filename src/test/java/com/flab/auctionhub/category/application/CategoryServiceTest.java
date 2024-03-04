@@ -1,5 +1,7 @@
 package com.flab.auctionhub.category.application;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -22,7 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class CategoryServiceTest {
@@ -54,7 +56,7 @@ class CategoryServiceTest {
             .name(CategoryType.MENSCLOTHING)
             .build();
 
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when
         Long id = categoryService.createCategory(request.toServiceRequest());
@@ -66,7 +68,6 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 목록 전체를 조회한다.")
     void findAllCategory() {
-
         // when
         List<CategoryResponse> categoryList = categoryService.findAllCategory();
 
@@ -85,9 +86,9 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 id값을 이용하여 조회하였을때 존재하지 않다면 예외를 발생한다.")
-    void findById() {
+    void findCategoryById() {
         // when // then
-        assertThatThrownBy(() -> categoryService.findById(999L))
+        assertThatThrownBy(() -> categoryService.findCategoryById(999L))
             .isInstanceOf(CategoryNotFoundException.class)
             .hasMessage("해당 카테고리를 찾을 수 없습니다.");
     }

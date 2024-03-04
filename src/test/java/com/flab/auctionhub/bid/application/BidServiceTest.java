@@ -1,5 +1,9 @@
 package com.flab.auctionhub.bid.application;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
+import static com.flab.auctionhub.util.TestUtils.TEST_SELLER;
+import static com.flab.auctionhub.util.TestUtils.TEST_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
@@ -17,6 +21,9 @@ import com.flab.auctionhub.product.domain.Product;
 import com.flab.auctionhub.product.domain.ProductSellingStatus;
 import com.flab.auctionhub.user.dao.UserMapper;
 import com.flab.auctionhub.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,11 +32,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class BidServiceTest {
@@ -67,7 +71,7 @@ class BidServiceTest {
 
         category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
-            .createdBy("admin")
+            .createdBy(TEST_ADMIN)
             .build();
         categoryMapper.save(category);
 
@@ -80,7 +84,7 @@ class BidServiceTest {
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
-            .createdBy("seller")
+            .createdBy(TEST_SELLER)
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
@@ -96,7 +100,7 @@ class BidServiceTest {
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when
         Long id = bidService.createBid(request);
@@ -107,14 +111,15 @@ class BidServiceTest {
 
     @Test
     @DisplayName("입찰을 등록할 때 입찰금액이 100원 단위가 아니면 예외가 발생한다.")
-    void checkBidPriceFormat() {
+    void createBidCheckPriceFormat() {
         // given
         BidCreateServiceRequest request = BidCreateServiceRequest.builder()
             .price(999)
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when // then
         assertThatThrownBy(() -> bidService.createBid(request))
@@ -124,14 +129,14 @@ class BidServiceTest {
 
     @Test
     @DisplayName("입찰을 등록할 때 입찰금액이 상품의 최고 입찰액보다 높지 않으면 예외가 발생한다.")
-    void checkBidPriceFormat2() {
+    void createBidCheckPriceFormat2() {
         // given
         BidCreateServiceRequest request = BidCreateServiceRequest.builder()
             .price(900)
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
 
         // when // then
         assertThatThrownBy(() -> bidService.createBid(request))
@@ -141,14 +146,14 @@ class BidServiceTest {
 
     @Test
     @DisplayName("상품에 따른 입찰 내역을 불러온다.")
-    void getBidListForProduct() {
+    void findBidsByProductId() {
         // given
         BidCreateServiceRequest request1 = BidCreateServiceRequest.builder()
             .price(2000)
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of("testUser"));
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
         bidService.createBid(request1);
         BidCreateServiceRequest request2 = BidCreateServiceRequest.builder()
             .price(3000)
@@ -158,7 +163,7 @@ class BidServiceTest {
         bidService.createBid(request2);
 
         // when
-        List<BidResponse> bidResponseList = bidService.getBidListForProduct(product.getId());
+        List<BidResponse> bidResponseList = bidService.findBidsByProductId(product.getId());
 
         // then
         assertThat(bidResponseList).hasSize(2)

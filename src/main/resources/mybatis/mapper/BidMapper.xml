@@ -20,7 +20,7 @@
     LIMIT 1;
   </select>
 
-  <select id="findByProductId" parameterType="Long" resultType="com.flab.auctionhub.bid.domain.Bid">
+  <select id="findAllByProductId" parameterType="Long" resultType="com.flab.auctionhub.bid.domain.Bid">
     SELECT price, user_id, product_id
     FROM bid
     WHERE product_id = #{productId}

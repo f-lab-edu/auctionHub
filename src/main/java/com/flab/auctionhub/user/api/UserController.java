@@ -1,13 +1,13 @@
 package com.flab.auctionhub.user.api;
 
 import com.flab.auctionhub.common.util.SessionUtil;
-import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.api.request.UserCreateRequest;
 import com.flab.auctionhub.user.api.request.UserLoginRequest;
+import com.flab.auctionhub.user.application.UserService;
 import com.flab.auctionhub.user.application.response.UserCreateResponse;
-import java.util.List;
 import com.flab.auctionhub.user.application.response.UserLoginResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +52,8 @@ public class UserController {
      * 회원 전체를 조회한다.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserCreateResponse>> findAllUser() {
-        List<UserCreateResponse> userList = userService.findAllUser();
+    public ResponseEntity<List<UserCreateResponse>> getAllUsers() {
+        List<UserCreateResponse> userList = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
@@ -62,8 +62,8 @@ public class UserController {
      * @param id 아이디
      */
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserCreateResponse> findById(@PathVariable Long id) {
-        UserCreateResponse user = userService.findById(id);
+    public ResponseEntity<UserCreateResponse> getUserById(@PathVariable Long id) {
+        UserCreateResponse user = userService.findUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
@@ -81,7 +81,7 @@ public class UserController {
      * 로그아웃을 한다.
      */
     @GetMapping("/logout")
-    public ResponseEntity<Void> logoutUser(HttpSession session) {
+    public ResponseEntity<Void> logout(HttpSession session) {
         SessionUtil.clear(session);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

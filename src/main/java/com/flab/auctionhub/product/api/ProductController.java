@@ -42,8 +42,8 @@ public class ProductController {
      * 전체 상품을 조회한다.
      */
     @GetMapping("/products")
-    public ResponseEntity<List<ProductResponse>> findAllProduct() {
-        List<ProductResponse> productList = productService.findAllProduct();
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        List<ProductResponse> productList = productService.findAllProducts();
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
@@ -52,8 +52,8 @@ public class ProductController {
      * @param id 상품 아이디
      */
     @GetMapping("/products/{id}")
-    public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
-        ProductResponse product = productService.findById(id);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.findProductById(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
@@ -62,8 +62,8 @@ public class ProductController {
      * @param request 상품 수정에 필요한정보
      */
     @PutMapping("/products")
-    public ResponseEntity<ProductResponse> update(@RequestBody @Validated ProductUpdateRequest request) {
-        ProductResponse product = productService.update(request.toServiceRequest());
+    public ResponseEntity<ProductResponse> updateProduct(@RequestBody @Validated ProductUpdateRequest request) {
+        ProductResponse product = productService.updateProduct(request.toServiceRequest());
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 

@@ -52,7 +52,7 @@ public class UserService {
     /**
      * 회원 전체를 조회한다.
      */
-    public List<UserCreateResponse> findAllUser() {
+    public List<UserCreateResponse> getAllUsers() {
         return userMapper.findAll().stream()
             .map(UserCreateResponse::of)
             .collect(Collectors.toList());
@@ -62,7 +62,7 @@ public class UserService {
      * 회원의 상세 정보를 조회한다.
      * @param id 아이디
      */
-    public UserCreateResponse findById(Long id) {
+    public UserCreateResponse findUserById(Long id) {
         return userMapper.findById(id)
             .map(UserCreateResponse::of)
             .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));

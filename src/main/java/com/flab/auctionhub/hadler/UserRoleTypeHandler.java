@@ -1,5 +1,6 @@
 package com.flab.auctionhub.hadler;
 
+import com.flab.auctionhub.common.exception.UserRoleTypeNotFoundException;
 import com.flab.auctionhub.user.domain.UserRoleType;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -39,6 +40,6 @@ public class UserRoleTypeHandler implements TypeHandler<UserRoleType> {
             if (userRoleType.getValue().equals(value))
                 return userRoleType;
         }
-        return null;
+        throw new UserRoleTypeNotFoundException("UserRoleType을 찾을 수 없습니다.");
     }
 }

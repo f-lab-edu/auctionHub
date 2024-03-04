@@ -14,12 +14,13 @@
 
   <select id="findAll" resultType="com.flab.auctionhub.category.domain.Category">
     SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
-    FROM category;
+    FROM category
+    WHERE is_deleted = 'N';
   </select>
 
   <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.category.domain.Category">
     SELECT id, name, is_deleted, created_at, created_by, updated_at, updated_by
     FROM category
-    WHERE id = #{id};
+    WHERE id = #{id} AND is_deleted = 'N';;
   </select>
 </mapper>

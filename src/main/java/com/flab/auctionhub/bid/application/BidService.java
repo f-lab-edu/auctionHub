@@ -9,11 +9,11 @@ import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import com.flab.auctionhub.user.application.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,10 +35,10 @@ public class BidService {
     @Transactional
     public Long createBid(BidCreateServiceRequest request) {
         // 회원 여부 조회
-        userService.findById(request.getUserId());
+        userService.findUserById(request.getUserId());
 
         // 상품 존재 여부 조회
-        ProductResponse productResponse = productService.findById(request.getProductId());
+        ProductResponse productResponse = productService.findProductById(request.getProductId());
 
         String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         checkValidPrice(request, productResponse);
@@ -52,8 +52,8 @@ public class BidService {
      * 상품에 따른 입찰 내역을 불러온다.
      * @param productId 상품 번호
      */
-    public List<BidResponse> getBidListForProduct(Long productId) {
-        List<Bid> bidList = bidMapper.findByProductId(productId);
+    public List<BidResponse> findBidsByProductId(Long productId) {
+        List<Bid> bidList = bidMapper.findAllByProductId(productId);
 
         return bidList.stream()
             .map(BidResponse::of)
@@ -71,7 +71,7 @@ public class BidService {
 
         Integer highestBid = bidMapper.selectHighestBidPriceForProduct(
             request.getProductId()).orElseGet(() -> productResponse.getMinBidPrice());
-        if (price < highestBid) {
+        if (price <= highestBid) {
             throw new InvalidPriceException("상품의 최고 입찰액보다 입찰금액이 높아야 합니다.");
         }
     }

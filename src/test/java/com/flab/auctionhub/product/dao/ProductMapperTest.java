@@ -2,7 +2,10 @@ package com.flab.auctionhub.product.dao;
 
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.HOLD;
 import static com.flab.auctionhub.product.domain.ProductSellingStatus.SELLING;
-import static com.flab.auctionhub.product.domain.ProductSellingStatus.STOP_SELLING;
+import static com.flab.auctionhub.product.domain.ProductSellingStatus.SOLD_OUT;
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
+import static com.flab.auctionhub.util.TestUtils.TEST_SELLER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -23,7 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class ProductMapperTest {
@@ -90,7 +93,7 @@ class ProductMapperTest {
         // given
         Product product1 = getProduct("나이키 슈즈1", "사이즈는 270입니다.", SELLING);
         Product product2 = getProduct("나이키 슈즈2", "사이즈는 280입니다.", HOLD);
-        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", STOP_SELLING);
+        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", SOLD_OUT);
         productMapper.saveAll(List.of(product1, product2, product3));
 
         // when
@@ -116,13 +119,13 @@ class ProductMapperTest {
             .id(product.getId())
             .name("나이키 슈즈2")
             .description("사이즈는 290입니다.")
-            .sellingStatus(STOP_SELLING)
+            .sellingStatus(SOLD_OUT)
             .quickPrice(1000)
             .startBidPrice(1000)
             .minBidPrice(1000)
             .startedAt(LocalDateTime.of(2023,12,22,05,44,37))
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
-            .updatedBy("updateSeller")
+            .updatedBy(TEST_SELLER)
             .userId(user.getId())
             .categoryId(category.getId())
             .build();
@@ -147,7 +150,7 @@ class ProductMapperTest {
         assertThat(result.getCreatedAt()).isNotNull();
         assertThat(result.getCreatedBy()).isNotNull();
         assertThat(result.getUpdatedAt()).isNotNull();
-        assertThat(result.getUpdatedBy()).isEqualTo("updateSeller");
+        assertThat(result.getUpdatedBy()).isEqualTo(TEST_SELLER);
         assertThat(result.getUserId()).isEqualTo(user.getId());
         assertThat(result.getCategoryId()).isEqualTo(category.getId());
     }
@@ -158,7 +161,7 @@ class ProductMapperTest {
         // given
         Product product1 = getProduct("나이키 슈즈1", "사이즈는 270입니다.", SELLING);
         Product product2 = getProduct("나이키 슈즈2", "사이즈는 280입니다.", HOLD);
-        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", STOP_SELLING);
+        Product product3 = getProduct("나이키 슈즈3", "사이즈는 290입니다.", SOLD_OUT);
         productMapper.saveAll(List.of(product1, product2, product3));
 
         // when
@@ -186,14 +189,14 @@ class ProductMapperTest {
             .endedAt(LocalDateTime.of(2023,12,25,05,44,37))
             .userId(user.getId())
             .categoryId(category.getId())
-            .createdBy("seller")
+            .createdBy(TEST_SELLER)
             .build();
     }
 
     private Category getCategory(CategoryType type) {
         Category category = Category.builder()
             .name(type)
-            .createdBy("admin")
+            .createdBy(TEST_ADMIN)
             .build();
         return category;
     }

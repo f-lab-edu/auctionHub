@@ -1,5 +1,7 @@
 package com.flab.auctionhub.category.dao;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
+import static com.flab.auctionhub.util.TestUtils.TEST_ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -14,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
+@ActiveProfiles(ACTIVE_PROFILE_TEST)
 @Transactional
 @SpringBootTest
 class CategoryMapperTest {
@@ -39,7 +41,7 @@ class CategoryMapperTest {
         // given
         Category category = Category.builder()
             .name(CategoryType.MENSCLOTHING)
-            .createdBy("admin")
+            .createdBy(TEST_ADMIN)
             .build();
 
         // when

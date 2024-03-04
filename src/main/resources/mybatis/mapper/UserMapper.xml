@@ -19,19 +19,20 @@
 
   <select id="findAll" resultType="com.flab.auctionhub.user.domain.User">
     SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
-    FROM user;
+    FROM user
+    WHERE is_deleted = 'N';
   </select>
 
   <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.user.domain.User">
     SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
     FROM user
-    WHERE id = #{id};
+    WHERE id = #{id} AND is_deleted = 'N';;
   </select>
 
   <select id="findByUserId" parameterType="String" resultType="com.flab.auctionhub.user.domain.User">
     SELECT id, user_id, password, username, role_type, phone_number, is_deleted, created_at, created_by, updated_at, updated_by
     FROM user
-    WHERE user_id = #{userId}
+    WHERE user_id = #{userId} AND is_deleted = 'N';
   </select>
 
 </mapper>

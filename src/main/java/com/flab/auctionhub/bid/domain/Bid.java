@@ -1,17 +1,13 @@
 package com.flab.auctionhub.bid.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Bid {
-
     /**
      * 입찰 번호
      */
@@ -36,4 +32,15 @@ public class Bid {
      * 상품 아이디
      */
     private Long productId;
+
+    @Builder
+    public Bid(Long id, int price, LocalDateTime createdAt, String createdBy, Long userId,
+        Long productId) {
+        this.id = id;
+        this.price = price;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.userId = userId;
+        this.productId = productId;
+    }
 }

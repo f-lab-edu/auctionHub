@@ -1,7 +1,7 @@
 package com.flab.auctionhub.category.api;
 
-import com.flab.auctionhub.category.application.CategoryService;
 import com.flab.auctionhub.category.api.request.CategoryRequest;
+import com.flab.auctionhub.category.application.CategoryService;
 import com.flab.auctionhub.category.application.response.CategoryResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class CategoryController {
      * 카테고리 전체를 조회한다.
      */
     @GetMapping("/category")
-    public ResponseEntity<List<CategoryResponse>> findAllCategory() {
+    public ResponseEntity<List<CategoryResponse>> getAllCategory() {
         List<CategoryResponse> categoryList = categoryService.findAllCategory();
         return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }

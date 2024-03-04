@@ -5,8 +5,8 @@
 <mapper namespace="com.flab.auctionhub.product.dao.ProductMapper" >
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, started_at, ended_at, created_by, user_id, category_id)
-    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{startedAt}, #{endedAt}, #{createdBy}, #{userId}, #{categoryId})
+    INSERT INTO product (name, description, selling_status, quick_price, start_bid_price, min_bid_price, current_bid_price, started_at, ended_at, created_by, user_id, category_id)
+    VALUES (#{name}, #{description}, #{sellingStatus}, #{quickPrice}, #{startBidPrice}, #{minBidPrice}, #{currentBidPrice}, #{startedAt}, #{endedAt}, #{createdBy}, #{userId}, #{categoryId})
     <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
       SELECT last_insert_id()
     </selectKey>
@@ -24,7 +24,8 @@
     SELECT id, name, description, selling_status, quick_price, start_bid_price, min_bid_price,
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
            ended_at, user_id, category_id
-    FROM product;
+    FROM product
+    WHERE is_deleted = 'N';
 
   </select>
 
@@ -33,7 +34,7 @@
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
            ended_at, user_id, category_id
     FROM product
-    WHERE id = #{id};
+    WHERE id = #{id} AND is_deleted = 'N';
   </select>
 
   <update id="update">
@@ -56,7 +57,7 @@
            current_bid_price, is_deleted, created_at, created_by, updated_at, updated_by, started_at,
            ended_at, user_id, category_id
     FROM product
-    WHERE selling_status = '판매중' OR selling_status = '판매대기';
+    WHERE (selling_status = '판매중' OR selling_status = '판매대기') AND is_deleted = 'N';
   </select>
 
 

@@ -5,7 +5,33 @@
 <mapper namespace="com.flab.auctionhub.order.dao.OrderMapper">
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-
+    INSERT INTO order (price, order_status, user_id, product_id, created_by)
+    VALUES (#{price}, #{orderStatus}, #{userId}, #{productId}, #{createdBy})
+    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
+      SELECT last_insert_id()
+    </selectKey>
   </insert>
+
+  <select id="findById" parameterType="Long" resultType="com.flab.auctionhub.order.domain.Order">
+    SELECT id, price, order_status, user_id, product_id, created_at, created_by, updated_at, updated_by
+    FROM order
+    WHERE id = #{id}
+    ORDER BY id;
+  </select>
+
+  <update id="update">
+    UPDATE order
+    SET order_status = #{orderStatus},
+        updated_at   = now(),
+        updated_by   = #{updatedBy}
+    WHERE id = #{id};
+  </update>
+
+  <select id="findAllByUserId" parameterType="Long" resultType="com.flab.auctionhub.order.domain.Order">
+    SELECT id, price, order_status, product_id
+    FROM order
+    WHERE user_id = #{userId}
+    ORDER BY id DESC;
+  </select>
 
 </mapper>

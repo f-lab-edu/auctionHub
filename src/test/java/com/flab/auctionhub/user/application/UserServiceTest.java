@@ -1,5 +1,6 @@
 package com.flab.auctionhub.user.application;
 
+import static com.flab.auctionhub.util.TestUtils.ACTIVE_PROFILE_TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -22,7 +23,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test") // 특정 프로파일이 활성화된 상태에서 테스트를 실행할 때 사용되는 어노테이션
+@ActiveProfiles(ACTIVE_PROFILE_TEST) // 특정 프로파일이 활성화된 상태에서 테스트를 실행할 때 사용되는 어노테이션
 @Transactional // 테스트 메서드가 트랜잭션내에서 실행되어, 테스트 수행중에 데이터베이스 조작이 발생하더라도 트랜잭션이 롤백되어 데이터베이스 상태가 변경되지 않게 하는 어노테이션
 @SpringBootTest // 스프링 애플리케이션 컨텍스트를 로드하고, 테스트 환경을 설정하여 통합 테스트를 수행하는 어노테이션
 class UserServiceTest {
@@ -34,7 +35,7 @@ class UserServiceTest {
     @DisplayName("회원 1명을 생성하면 userId가 리턴된다.")
     void createUser() {
         // given
-        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId", "password", "username", "010-0000-0000");
+        UserCreateServiceRequest userCreateRequest = getUserServiceRequest("userId", "password", "username", "010-0000-0000");
 
         // when
         Long userId = userService.createUser(userCreateRequest);
@@ -47,9 +48,9 @@ class UserServiceTest {
     @DisplayName("중복된 회원을 생성하면 예외가 발생한다.")
     void checkUserIdDuplication() {
         // given
-        UserCreateServiceRequest userCreateRequest1 = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest1 = getUserServiceRequest("userId", "password", "username",
             "010-0000-0000");
-        UserCreateServiceRequest userCreateRequest2 = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest2 = getUserServiceRequest("userId", "password", "username",
             "010-0000-0000");
         userService.createUser(userCreateRequest1);
 
@@ -61,20 +62,20 @@ class UserServiceTest {
 
     @Test
     @DisplayName("회원 3명을 생성하여 전체 회원을 조회한다.")
-    void findAllUser() {
+    void getAllUsers() {
         // given
-        UserCreateServiceRequest userCreateRequest1 = userCreateRequest("userId1", "password1", "username",
+        UserCreateServiceRequest userCreateRequest1 = getUserServiceRequest("userId1", "password1", "username",
             "010-0000-0000");
-        UserCreateServiceRequest userCreateRequest2 = userCreateRequest("userId2", "password2", "username",
+        UserCreateServiceRequest userCreateRequest2 = getUserServiceRequest("userId2", "password2", "username",
             "010-1111-1111");
-        UserCreateServiceRequest userCreateRequest3 = userCreateRequest("userId3", "password3", "username",
+        UserCreateServiceRequest userCreateRequest3 = getUserServiceRequest("userId3", "password3", "username",
             "010-2222-2222");
         userService.createUser(userCreateRequest1);
         userService.createUser(userCreateRequest2);
         userService.createUser(userCreateRequest3);
 
         // when
-        List<UserCreateResponse> userList = userService.findAllUser();
+        List<UserCreateResponse> userList = userService.getAllUsers();
 
         // then
         assertThat(userList).hasSize(3)
@@ -91,14 +92,14 @@ class UserServiceTest {
 
     @Test
     @DisplayName("회원을 등록하고 PK값인 id를 이용하여 회원을 조회한다.")
-    void findById() {
+    void findUserById() {
         // given
-        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId1", "password1", "username",
+        UserCreateServiceRequest userCreateRequest = getUserServiceRequest("userId1", "password1", "username",
             "010-0000-0000");
         Long userCreateRequestId = userService.createUser(userCreateRequest);
 
         // when
-        UserCreateResponse userCreateResponse = userService.findById(userCreateRequestId);
+        UserCreateResponse userCreateResponse = userService.findUserById(userCreateRequestId);
 
         // then
         assertThat(userCreateResponse.getUserId()).isEqualTo(userCreateRequest.getUserId());
@@ -110,9 +111,9 @@ class UserServiceTest {
 
     @Test
     @DisplayName("회원을 조회하였는데 존재하지 않다면 예외를 발생한다.")
-    void findByIdWithoutUser() {
+    void findUserByIdWithoutUser() {
         // when // then
-        assertThatThrownBy(() -> userService.findById(1L))
+        assertThatThrownBy(() -> userService.findUserById(1L))
             .isInstanceOf(UserNotFoundException.class)
             .hasMessage("해당 유저를 찾을 수 없습니다.");
     }
@@ -129,7 +130,7 @@ class UserServiceTest {
     @DisplayName("회원을 등록하고 로그인한다.")
     void login(UserLoginServiceRequest userLoginRequest) {
         // given
-        UserCreateServiceRequest userCreateRequest = userCreateRequest("userId", "password", "username",
+        UserCreateServiceRequest userCreateRequest = getUserServiceRequest("userId", "password", "username",
             "010-0000-0000");
         userService.createUser(userCreateRequest);
         MockHttpSession session = new MockHttpSession();
@@ -141,7 +142,7 @@ class UserServiceTest {
         assertThat(userLoginResponse.getUserId()).isEqualTo(userCreateRequest.getUserId());
     }
 
-    private UserCreateServiceRequest userCreateRequest(String userId, String password, String username,
+    private UserCreateServiceRequest getUserServiceRequest(String userId, String password, String username,
         String phoneNumber) {
         return UserCreateServiceRequest.builder()
             .userId(userId)
