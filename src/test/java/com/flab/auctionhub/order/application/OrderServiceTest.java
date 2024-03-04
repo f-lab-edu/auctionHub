@@ -229,6 +229,39 @@ class OrderServiceTest {
             );
     }
 
+    @Test
+    @DisplayName("유저 주문건에 대해 주문 상태별 목록을 불러온다.")
+    void findOrderHistoryByOrderId() {
+        // given
+        OrderCreateServiceRequest createRequest = OrderCreateServiceRequest.builder()
+            .price(30000)
+            .orderStatus(OrderStatus.INIT)
+            .userId(user.getId())
+            .productId(product.getId())
+            .build();
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
+        Long id = orderService.createOrder(createRequest);
+        OrderUpdateServiceRequest updateRequest = OrderUpdateServiceRequest.builder()
+            .id(id)
+            .orderStatus(OrderStatus.RECEIVED)
+            .userId(user.getId())
+            .productId(product2.getId())
+            .build();
+        orderService.updateOrder(updateRequest);
+
+        // when
+        List<OrderResponse> orderResponseList = orderService.findOrderHistoryByOrderId(id);
+
+        // then
+
+        assertThat(orderResponseList).hasSize(2)
+            .extracting("orderStatus", "productId", "id")
+            .containsExactlyInAnyOrder(
+                tuple(createRequest.getOrderStatus(), createRequest.getProductId(), id),
+                tuple(updateRequest.getOrderStatus(),updateRequest.getProductId(), id)
+            );
+    }
+
     private Product getProduct(String name, String description, ProductSellingStatus status) {
         return Product.builder()
             .name(name)

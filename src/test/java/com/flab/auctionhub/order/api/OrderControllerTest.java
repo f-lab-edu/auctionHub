@@ -287,6 +287,20 @@ class OrderControllerTest {
         .andExpect(jsonPath("$").isArray());
     }
 
+    @Test
+    @DisplayName("유저 주문건에 대해 주문 상태별 목록을 불러온다.")
+    void getOrderHistoryByOrderId() throws Exception {
+        // when // then
+        mockMvc.perform(
+                get("/orders/history/{id}", 1L)
+                    .session(session)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray());
+    }
+
     private OrderCreateRequest getOrderRequest(int price, OrderStatus status) {
         return OrderCreateRequest.builder()
             .price(price)

@@ -62,4 +62,14 @@ public class OrderController {
         List<OrderResponse> orderList = orderService.findOrdersByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(orderList);
     }
+
+    /**
+     * 유저 주문건에 대해 주문 상태별 목록을 불러온다.
+     * @param id 주문 아이디
+     */
+    @GetMapping("/orders/history/{id}")
+    public ResponseEntity<List<OrderResponse>> getOrderHistoryByOrderId(@PathVariable Long id) {
+        List<OrderResponse> orderHistoryList = orderService.findOrderHistoryByOrderId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(orderHistoryList);
+    }
 }

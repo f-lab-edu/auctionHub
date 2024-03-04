@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.auctionhub.order.dao.OrderHistoryMapper">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO order_history (price, order_status, user_id, product_id, created_by, order_id)
+    VALUES (#{price}, #{orderStatus}, #{userId}, #{productId}, #{createdBy}, #{orderId})
+    <selectKey keyColumn="id" keyProperty="id" resultType="Long" order="AFTER">
+      SELECT last_insert_id()
+    </selectKey>
+  </insert>
+
+  <select id="findByOrderId" parameterType="Long" resultType="com.flab.auctionhub.order.domain.OrderHistory">
+    SELECT id, price, order_status, created_at, created_by, user_id, product_id, order_id
+    FROM order_history
+    WHERE order_id = #{orderId};
+  </select>
+
+</mapper>

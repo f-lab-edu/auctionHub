@@ -1,6 +1,7 @@
 package com.flab.auctionhub.order.application.response;
 
 import com.flab.auctionhub.order.domain.Order;
+import com.flab.auctionhub.order.domain.OrderHistory;
 import com.flab.auctionhub.order.domain.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,16 @@ public class OrderResponse {
             .orderStatus(order.getOrderStatus())
             .userId(order.getUserId())
             .productId(order.getProductId())
+            .build();
+    }
+
+    public static OrderResponse of(OrderHistory orderHistory) {
+        return OrderResponse.builder()
+            .id(orderHistory.getOrderId())
+            .price(orderHistory.getPrice())
+            .orderStatus(orderHistory.getOrderStatus())
+            .userId(orderHistory.getUserId())
+            .productId(orderHistory.getProductId())
             .build();
     }
 }
