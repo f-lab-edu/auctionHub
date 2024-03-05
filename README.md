@@ -36,13 +36,17 @@
 
     https://systemdata.tistory.com/82
 
-- 테이블마다 id 칼럼을 PK로 사용한 이유는 무엇일까?
-
-    https://systemdata.tistory.com/84
-
 - Scale Out 상황시 세션불일치 방지를 위한 Redis 선정 과정
 
     https://systemdata.tistory.com/87
+
+- 테이블마다 id 칼럼을 PK로 사용한 이유는 무엇일까?
+
+  https://systemdata.tistory.com/84
+
+- Auditing을 고려한 테이블 설계 과정
+
+  https://systemdata.tistory.com/88
 
 - 젠킨스를 통한 CI/CD 구성하기 - CI 구축 과정
 
