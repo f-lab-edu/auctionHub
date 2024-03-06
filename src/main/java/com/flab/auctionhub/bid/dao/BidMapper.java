@@ -13,4 +13,6 @@ public interface BidMapper {
     Optional<Integer> selectHighestBidPriceForProduct(Long id);
 
     List<Bid> findAllByProductId(Long id);
+
+    Optional<Bid> findByProductId(Long productId);
 }

@@ -3,10 +3,13 @@ POST localhost:8080/bids
 Content-Type: application/json
 
 {
-  "price": "3000",
-  "userId": "1",
+  "price": "8000",
+  "userId": "2",
   "productId": "1"
 }
 
 ### 상품에 대한 입찰내역을 조회한다.
-GET localhost:8080/bids/1
+GET localhost:8080/bids?productId=1
+
+### 상품에 따른 최고 입찰액을 불러온다.
+GET localhost:8080/bids/highest?productId=1

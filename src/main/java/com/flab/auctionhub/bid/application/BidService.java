@@ -2,8 +2,10 @@ package com.flab.auctionhub.bid.application;
 
 import com.flab.auctionhub.bid.application.request.BidCreateServiceRequest;
 import com.flab.auctionhub.bid.application.response.BidResponse;
+import com.flab.auctionhub.bid.auction.RedisPubSubPublisher;
 import com.flab.auctionhub.bid.dao.BidMapper;
 import com.flab.auctionhub.bid.domain.Bid;
+import com.flab.auctionhub.bid.exception.BidNotFoundException;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.ProductService;
@@ -21,12 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class BidService {
 
     private final BidMapper bidMapper;
-
     private final UserService userService;
-
     private final ProductService productService;
-
     private final LoginUserAuditorAware loginUserAuditorAware;
+    private final RedisPubSubPublisher redisPubsubPublisher;
 
     /**
      * 입찰을 등록한다.
@@ -54,10 +54,21 @@ public class BidService {
      */
     public List<BidResponse> findBidsByProductId(Long productId) {
         List<Bid> bidList = bidMapper.findAllByProductId(productId);
-
         return bidList.stream()
             .map(BidResponse::of)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 상품에 따른 최고 입찰액을 불러온다.
+     * @param productId 상품 번호
+     */
+    public BidResponse findHighestPrice(Long productId) {
+        BidResponse bidResponse = bidMapper.findByProductId(productId)
+            .map(BidResponse::of)
+            .orElseThrow(() -> new BidNotFoundException("현재 최고 입찰자가 없습니다."));
+        redisPubsubPublisher.convertAndSend(bidResponse);
+        return bidResponse;
     }
 
     /**
