@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
             .order(1)
             .addPathPatterns("/**")
-            .excludePathPatterns("/", "/login", "/logout", "/users", "/users/check-duplication");
+            .excludePathPatterns("/", "/login", "/logout", "/users", "/users/check-duplication", "/ws");
 
         registry.addInterceptor(new SellerCheckInterceptor())
             .order(2)
@@ -25,6 +25,4 @@ public class WebConfig implements WebMvcConfigurer {
             .order(3)
             .addPathPatterns("/category");
     }
-
-
 }

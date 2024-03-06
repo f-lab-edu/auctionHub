@@ -1,11 +1,15 @@
 package com.flab.auctionhub.bid.application.response;
 
 import com.flab.auctionhub.bid.domain.Bid;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BidResponse {
     /**
      * 압찰 가격

@@ -39,4 +39,14 @@ public class BidController {
         List<BidResponse> bidList = bidService.findBidsByProductId(productId);
         return ResponseEntity.status(HttpStatus.OK).body(bidList);
     }
+
+    /**
+     * 상품에 따른 최고 입찰액을 불러온다.
+     * @param productId 상품 번호
+     */
+    @GetMapping("/bids/highest")
+    public ResponseEntity<BidResponse> getHighestPrice(@RequestParam Long productId) {
+        BidResponse bidResponse = bidService.findHighestPrice(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(bidResponse);
+    }
 }

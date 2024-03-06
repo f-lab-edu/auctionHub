@@ -138,6 +138,23 @@ class BidControllerTest {
             .andExpect(jsonPath("$").isArray());
     }
 
+    @Test
+    @DisplayName("상품에 따른 최고 입찰액을 불러온다.")
+    void getHighestPrice() throws Exception {
+        // given
+        BidCreateRequest bid = getBidRequest(2000);
+
+        // when // then
+        mockMvc.perform(
+                get("/bids/highest", bid.getProductId())
+                    .param("productId", String.valueOf(bid.getProductId()))
+                    .session(session)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
     private BidCreateRequest getBidRequest(int price) {
         return BidCreateRequest.builder()
             .price(price)

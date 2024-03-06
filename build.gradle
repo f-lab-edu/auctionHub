@@ -30,6 +30,7 @@ dependencies {
   implementation 'org.springframework.security:spring-security-crypto'
   implementation 'org.springframework.boot:spring-boot-starter-data-redis'
   implementation 'org.springframework.session:spring-session-data-redis'
+  implementation 'org.springframework.boot:spring-boot-starter-websocket'
   runtimeOnly 'com.h2database:h2'
   compileOnly 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
@@ -96,6 +97,7 @@ jacocoTestCoverageVerification {
           '**.*Handler*',
           '**.*Interceptor*',
           '**.*Auditor*',
+          '**.*Redis*',
       ]
     }
   }
