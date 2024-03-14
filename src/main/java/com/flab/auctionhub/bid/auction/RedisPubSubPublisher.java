@@ -14,9 +14,9 @@ public class RedisPubSubPublisher {
     private final StringRedisTemplate redisTemplate;
     private final ObjectMapper mapper;
 
-    public void convertAndSend(BidResponse response) {
+    public void convertAndSend(Integer highestBid) {
         try {
-            String message = mapper.writeValueAsString(response);
+            String message = mapper.writeValueAsString(highestBid);
             redisTemplate.convertAndSend("auction", message);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
