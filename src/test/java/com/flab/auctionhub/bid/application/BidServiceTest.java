@@ -173,4 +173,29 @@ class BidServiceTest {
                 tuple(request2.getPrice(), request2.getUserId(), request2.getProductId())
             );
     }
+
+    @Test
+    @DisplayName("상품에 따른 최고 입찰액을 불러온다.")
+    void findHighestPrice() {
+        // given
+        BidCreateServiceRequest request1 = BidCreateServiceRequest.builder()
+            .price(3000)
+            .userId(user.getId())
+            .productId(product.getId())
+            .build();
+        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
+        bidService.createBid(request1);
+        BidCreateServiceRequest request2 = BidCreateServiceRequest.builder()
+            .price(5000)
+            .userId(user.getId())
+            .productId(product.getId())
+            .build();
+        bidService.createBid(request2);
+
+        // when
+        int highestPrice = bidService.findHighestPrice(product.getId());
+
+        // then
+        assertThat(highestPrice).isEqualTo(request2.getPrice());
+    }
 }
