@@ -45,8 +45,8 @@ public class BidController {
      * @param productId 상품 번호
      */
     @GetMapping("/bids/highest")
-    public ResponseEntity<BidResponse> getHighestPrice(@RequestParam Long productId) {
-        BidResponse bidResponse = bidService.findHighestPrice(productId);
-        return ResponseEntity.status(HttpStatus.OK).body(bidResponse);
+    public ResponseEntity<Integer> getHighestPrice(@RequestParam Long productId) {
+        Integer highestPrice = bidService.findHighestPrice(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(highestPrice);
     }
 }

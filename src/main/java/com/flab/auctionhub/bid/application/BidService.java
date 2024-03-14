@@ -2,10 +2,8 @@ package com.flab.auctionhub.bid.application;
 
 import com.flab.auctionhub.bid.application.request.BidCreateServiceRequest;
 import com.flab.auctionhub.bid.application.response.BidResponse;
-import com.flab.auctionhub.bid.auction.RedisPubSubPublisher;
 import com.flab.auctionhub.bid.dao.BidMapper;
 import com.flab.auctionhub.bid.domain.Bid;
-import com.flab.auctionhub.bid.exception.BidNotFoundException;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
 import com.flab.auctionhub.product.application.ProductService;
@@ -14,6 +12,7 @@ import com.flab.auctionhub.user.application.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,8 @@ public class BidService {
     private final UserService userService;
     private final ProductService productService;
     private final LoginUserAuditorAware loginUserAuditorAware;
-    private final RedisPubSubPublisher redisPubsubPublisher;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final String HIGHEST_BID_KEY = "highestBid";
 
     /**
      * 입찰을 등록한다.
@@ -42,6 +42,9 @@ public class BidService {
 
         String currentAuditor = loginUserAuditorAware.getCurrentAuditor().get();
         checkValidPrice(request, productResponse);
+
+        // Redis를 사용하여 최고 입찰액 업데이트
+        updateHighestBidInCache(request.getProductId(), request.getPrice());
 
         Bid bid = request.toEntity(currentAuditor);
         bidMapper.save(bid);
@@ -63,12 +66,17 @@ public class BidService {
      * 상품에 따른 최고 입찰액을 불러온다.
      * @param productId 상품 번호
      */
-    public BidResponse findHighestPrice(Long productId) {
-        BidResponse bidResponse = bidMapper.findByProductId(productId)
-            .map(BidResponse::of)
-            .orElseThrow(() -> new BidNotFoundException("현재 최고 입찰자가 없습니다."));
-        redisPubsubPublisher.convertAndSend(bidResponse);
-        return bidResponse;
+    public Integer findHighestPrice(Long productId) {
+        String key = HIGHEST_BID_KEY + productId;
+        String highestBid = redisTemplate.opsForValue().get(key);
+
+        if (highestBid == null) {
+            highestBid = bidMapper.selectHighestBidPriceForProduct(productId)
+                .orElseGet(() -> productService.findProductById(productId).getMinBidPrice())
+                .toString();
+            redisTemplate.opsForValue().set(key, highestBid);
+        }
+        return Integer.valueOf(highestBid);
     }
 
     /**
@@ -94,4 +102,19 @@ public class BidService {
         return price % 100 != 0;
     }
 
+    /**
+     * Redis에 저장된 최고 입찰액을 업데이트한다.
+     * @param productId 상품 아이디
+     * @param newBidPrice 새로운 입찰 금액
+     */
+    private void updateHighestBidInCache(Long productId, int newBidPrice) {
+        String key = HIGHEST_BID_KEY + productId;
+        String currentHighestBid = redisTemplate.opsForValue().get(key);
+
+        int currentPrice = (currentHighestBid != null) ? Integer.parseInt(currentHighestBid) : 0;
+
+        if (newBidPrice > currentPrice) {
+            redisTemplate.opsForValue().set(key, String.valueOf(newBidPrice));
+        }
+    }
 }

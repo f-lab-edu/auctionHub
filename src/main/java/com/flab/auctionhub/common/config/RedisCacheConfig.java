@@ -1,10 +1,8 @@
 package com.flab.auctionhub.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.auctionhub.bid.auction.RedisPubSubListener;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,23 +11,15 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import java.time.Duration;
 
 
 @EnableCaching
 @Configuration
 @RequiredArgsConstructor
 public class RedisCacheConfig {
-
-    private final SimpMessageSendingOperations template;
-    private final ObjectMapper mapper;
 
     @Value("${spring.redis.session.host}") // Spring 프레임워크에서 프로퍼티 값을 주입받을 때 사용하는 어노테이션
     private String host;
@@ -52,15 +42,20 @@ public class RedisCacheConfig {
     }
 
     @Bean
-    public MessageListenerAdapter redisPubsubListenerAdapter() {
-        return new MessageListenerAdapter(new RedisPubSubListener(template, mapper));
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(10)) // 캐시의 만료 시간을 10분으로 설정
+            .disableCachingNullValues() // null 값 캐싱 비활성화
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 
     @Bean
-    public RedisMessageListenerContainer redisPubsubContainer() {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisCacheConnectionFactory());
-        container.addMessageListener(redisPubsubListenerAdapter(), new PatternTopic("auction"));
-        return container;
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+        RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
+            .cacheDefaults(cacheConfiguration())
+            .transactionAware()
+            .build();
+        return redisCacheManager;
     }
 }
