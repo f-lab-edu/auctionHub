@@ -32,6 +32,10 @@
 ---
 ### 🚩 기술적 issue해결과정
 
+- Redis 캐시 적용으로 성능 개선하기
+
+    https://systemdata.tistory.com/91
+
 - Validation 책임과 범위는 어떻게 가져가야할까?
 
     https://systemdata.tistory.com/82
