@@ -60,6 +60,12 @@ spring:
       data-locations: classpath*:data.sql
       mode: always
 
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
 ---
 # H2 test 환경
 spring:

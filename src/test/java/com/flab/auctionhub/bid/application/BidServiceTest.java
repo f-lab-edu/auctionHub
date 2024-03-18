@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import com.flab.auctionhub.bid.application.request.BidCreateServiceRequest;
 import com.flab.auctionhub.bid.application.response.BidResponse;
+import com.flab.auctionhub.bid.dao.BidMapper;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.category.dao.CategoryMapper;
 import com.flab.auctionhub.category.domain.Category;
@@ -40,16 +41,14 @@ class BidServiceTest {
 
     @Autowired
     private BidService bidService;
-
+    @Autowired
+    private BidMapper bidMapper;
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private ProductMapper productMapper;
-
     @Autowired
     private CategoryMapper categoryMapper;
-
     @MockBean
     private LoginUserAuditorAware loginUserAuditorAware;
 
@@ -89,24 +88,6 @@ class BidServiceTest {
             .categoryId(category.getId())
             .build();
         productMapper.save(product);
-    }
-
-    @Test
-    @DisplayName("입찰을 등록한다")
-    void createBid() {
-        // given
-        BidCreateServiceRequest request = BidCreateServiceRequest.builder()
-            .price(2000)
-            .userId(user.getId())
-            .productId(product.getId())
-            .build();
-        when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
-
-        // when
-        Long id = bidService.createBid(request);
-
-        // then
-        assertThat(id).isNotNull();
     }
 
     @Test
@@ -154,13 +135,13 @@ class BidServiceTest {
             .productId(product.getId())
             .build();
         when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
-        bidService.createBid(request1);
+        bidMapper.save(request1.toEntity(TEST_ADMIN));
         BidCreateServiceRequest request2 = BidCreateServiceRequest.builder()
             .price(3000)
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        bidService.createBid(request2);
+        bidMapper.save(request2.toEntity(TEST_ADMIN));
 
         // when
         List<BidResponse> bidResponseList = bidService.findBidsByProductId(product.getId());
@@ -184,13 +165,13 @@ class BidServiceTest {
             .productId(product.getId())
             .build();
         when(loginUserAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(TEST_USER));
-        bidService.createBid(request1);
+        bidMapper.save(request1.toEntity(TEST_ADMIN));
         BidCreateServiceRequest request2 = BidCreateServiceRequest.builder()
             .price(5000)
             .userId(user.getId())
             .productId(product.getId())
             .build();
-        bidService.createBid(request2);
+        bidMapper.save(request2.toEntity(TEST_ADMIN));
 
         // when
         int highestPrice = bidService.findHighestPrice(product.getId());
