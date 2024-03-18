@@ -1,5 +1,6 @@
 package com.flab.auctionhub.common.exception;
 
+import com.flab.auctionhub.bid.exception.BidMessageConversionException;
 import com.flab.auctionhub.bid.exception.BidNotFoundException;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.category.exception.CategoryNotFoundException;
@@ -115,6 +116,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BidNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBidNotFoundException(BidNotFoundException exception) {
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+    @ExceptionHandler(BidMessageConversionException.class)
+    public ResponseEntity<ErrorResponse> handleBidMessageConversionException(BidMessageConversionException exception) {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 

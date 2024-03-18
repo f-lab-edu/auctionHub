@@ -25,9 +25,9 @@ public class BidController {
      * @param request 입찰에 필요한 정보
      */
     @PostMapping("/bids")
-    public ResponseEntity<Long> createBid(@RequestBody @Validated BidCreateRequest request) {
-        Long id = bidService.createBid(request.toServiceRequest());
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
+    public ResponseEntity<Void> createBid(@RequestBody @Validated BidCreateRequest request) {
+        bidService.createBid(request.toServiceRequest());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**

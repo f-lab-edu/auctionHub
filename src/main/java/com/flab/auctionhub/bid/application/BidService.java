@@ -1,17 +1,23 @@
 package com.flab.auctionhub.bid.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.auctionhub.bid.application.request.BidCreateServiceRequest;
 import com.flab.auctionhub.bid.application.response.BidResponse;
 import com.flab.auctionhub.bid.dao.BidMapper;
 import com.flab.auctionhub.bid.domain.Bid;
+import com.flab.auctionhub.bid.exception.BidMessageConversionException;
 import com.flab.auctionhub.bid.exception.InvalidPriceException;
 import com.flab.auctionhub.common.audit.LoginUserAuditorAware;
+import com.flab.auctionhub.common.config.RabbitMQConfig;
+import com.flab.auctionhub.common.config.RedisCacheConfig;
 import com.flab.auctionhub.product.application.ProductService;
 import com.flab.auctionhub.product.application.response.ProductResponse;
 import com.flab.auctionhub.user.application.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +32,18 @@ public class BidService {
     private final ProductService productService;
     private final LoginUserAuditorAware loginUserAuditorAware;
     private final RedisTemplate<String, String> redisTemplate;
-    private final String HIGHEST_BID_KEY = "highestBid";
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
+    private static final String HIGHEST_BID_KEY = RedisCacheConfig.HIGHEST_BID_KEY;
+    private static final String EXCHANGE_NAME = RabbitMQConfig.EXCHANGE_NAME;
+    private static final String ROUTING_KEY = RabbitMQConfig.ROUTING_KEY;
 
     /**
      * 입찰을 등록한다.
      * @param request 입찰 등록에 필요한 정보
      */
     @Transactional
-    public Long createBid(BidCreateServiceRequest request) {
+    public void createBid(BidCreateServiceRequest request) {
         // 회원 여부 조회
         userService.findUserById(request.getUserId());
 
@@ -47,8 +57,14 @@ public class BidService {
         updateHighestBidInCache(request.getProductId(), request.getPrice());
 
         Bid bid = request.toEntity(currentAuditor);
-        bidMapper.save(bid);
-        return bid.getId();
+
+        // RabbitMQ로 메시지 발송
+        try {
+            String message = objectMapper.writeValueAsString(bid);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, message);
+        } catch (JsonProcessingException e) {
+            throw new BidMessageConversionException("메시지 변환에 실패했습니다.");
+        }
     }
 
     /**

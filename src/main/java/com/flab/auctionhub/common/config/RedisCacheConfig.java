@@ -21,6 +21,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisCacheConfig {
 
+    public static final String HIGHEST_BID_KEY = "highestBid";
+
     @Value("${spring.redis.session.host}") // Spring 프레임워크에서 프로퍼티 값을 주입받을 때 사용하는 어노테이션
     private String host;
 
@@ -52,10 +54,9 @@ public class RedisCacheConfig {
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
+        return RedisCacheManager.builder(connectionFactory)
             .cacheDefaults(cacheConfiguration())
             .transactionAware()
             .build();
-        return redisCacheManager;
     }
 }
